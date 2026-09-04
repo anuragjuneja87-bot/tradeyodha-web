@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import {
   AlertCircle,
   ArrowDownRight,
@@ -265,7 +264,7 @@ export default function PreMarketPage() {
       <header className="sticky top-0 z-40 border-b border-white/8 bg-[#071019]/92 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-4 px-4 sm:px-6">
           <button className="grid size-9 place-items-center rounded-lg border border-white/10 text-slate-300 lg:hidden" onClick={() => setMobileWatchlist((value) => !value)} aria-label="Toggle watchlist"><Menu className="size-5" /></button>
-          <Link href="/pre-market" className="flex items-center gap-2.5" aria-label="TradeYodha pre-market home"><span className="grid size-8 place-items-center rounded-lg border border-amber-300/30 bg-amber-300/10 text-sm font-bold text-amber-300">Y</span><span className="text-[15px] font-semibold tracking-[0.01em] text-white">TradeYodha</span></Link>
+          <div className="flex items-center gap-2.5" aria-label="TradeYodha"><span className="grid size-8 place-items-center rounded-lg border border-amber-300/30 bg-amber-300/10 text-sm font-bold text-amber-300">Y</span><span className="text-[15px] font-semibold tracking-[0.01em] text-white">TradeYodha</span></div>
           <span className="hidden h-5 w-px bg-white/10 sm:block" /><span className="hidden text-sm text-slate-400 sm:block">Pre-market Brief</span>
           <div className="ml-auto flex items-center gap-3">
             <div className={`hidden items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium md:flex ${watchlistMeta?.feed === 'real-time' ? 'border-emerald-400/20 bg-emerald-400/8 text-emerald-300' : 'border-amber-300/20 bg-amber-300/[0.06] text-amber-200'}`}><span className="relative flex size-2"><span className={`relative inline-flex size-2 rounded-full ${watchlistMeta?.feed === 'real-time' ? 'bg-emerald-400' : 'bg-amber-300'}`} /></span>Massive · {watchlistMeta?.feed === 'real-time' ? 'Real-time' : '15-min delayed'}</div>
