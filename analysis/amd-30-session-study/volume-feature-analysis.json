@@ -1,0 +1,2314 @@
+{
+  "baseline": {
+    "clean15": 22.2,
+    "clean30": 25.9,
+    "noon": 66.7
+  },
+  "weightingMethod": "For each feature, blend 70% shrinkage-adjusted clean-15-minute lift with 30% shrinkage-adjusted by-noon lift; normalize only positive evidence to 100. These are exploratory univariate weights, not independent model coefficients.",
+  "features": [
+    {
+      "key": "outperformedQqq",
+      "label": "Outperformed QQQ",
+      "count": 11,
+      "clean15": 45.5,
+      "clean30": 54.5,
+      "reachedByNoon": 81.8,
+      "clean15Lift": 23.2,
+      "noonLift": 15.2,
+      "evidence": 0.17607,
+      "provisionalWeight": 18.4
+    },
+    {
+      "key": "elevatedEventVolume",
+      "label": "Elevated event volume",
+      "count": 7,
+      "clean15": 42.9,
+      "clean30": 42.9,
+      "reachedByNoon": 85.7,
+      "clean15Lift": 20.6,
+      "noonLift": 19,
+      "evidence": 0.15679,
+      "provisionalWeight": 16.4
+    },
+    {
+      "key": "accepted30Seconds",
+      "label": "0.70 accepted for 30 seconds",
+      "count": 10,
+      "clean15": 50,
+      "clean30": 50,
+      "reachedByNoon": 60,
+      "clean15Lift": 27.8,
+      "noonLift": -6.7,
+      "evidence": 0.14537,
+      "provisionalWeight": 15.2
+    },
+    {
+      "key": "camConfluence",
+      "label": "Camarilla within 0.20 ORB range",
+      "count": 8,
+      "clean15": 50,
+      "clean30": 50,
+      "reachedByNoon": 62.5,
+      "clean15Lift": 27.8,
+      "noonLift": -4.2,
+      "evidence": 0.14556,
+      "provisionalWeight": 15.2
+    },
+    {
+      "key": "positiveFromOpen",
+      "label": "Positive from the open",
+      "count": 10,
+      "clean15": 40,
+      "clean30": 50,
+      "reachedByNoon": 80,
+      "clean15Lift": 17.8,
+      "noonLift": 13.3,
+      "evidence": 0.13704,
+      "provisionalWeight": 14.4
+    },
+    {
+      "key": "premarketRelativeStrength",
+      "label": "Positive premarket relative to SMH",
+      "count": 10,
+      "clean15": 30,
+      "clean30": 30,
+      "reachedByNoon": 80,
+      "clean15Lift": 7.8,
+      "noonLift": 13.3,
+      "evidence": 0.0787,
+      "provisionalWeight": 8.2
+    },
+    {
+      "key": "strongClose",
+      "label": "Strong reclaim close",
+      "count": 14,
+      "clean15": 28.6,
+      "clean30": 35.7,
+      "reachedByNoon": 78.6,
+      "clean15Lift": 6.3,
+      "noonLift": 11.9,
+      "evidence": 0.07014,
+      "provisionalWeight": 7.3
+    },
+    {
+      "key": "aboveVwap",
+      "label": "Above cumulative VWAP",
+      "count": 15,
+      "clean15": 26.7,
+      "clean30": 33.3,
+      "reachedByNoon": 73.3,
+      "clean15Lift": 4.4,
+      "noonLift": 6.7,
+      "evidence": 0.0451,
+      "provisionalWeight": 4.7
+    },
+    {
+      "key": "buyerDominance",
+      "label": "Buyer share at least 55%",
+      "count": 11,
+      "clean15": 27.3,
+      "clean30": 27.3,
+      "reachedByNoon": 45.5,
+      "clean15Lift": 5.1,
+      "noonLift": -21.2,
+      "evidence": -0.02393,
+      "provisionalWeight": 0
+    },
+    {
+      "key": "persistentImbalance",
+      "label": "Buyer imbalance persists 30 seconds",
+      "count": 11,
+      "clean15": 27.3,
+      "clean30": 27.3,
+      "reachedByNoon": 45.5,
+      "clean15Lift": 5.1,
+      "noonLift": -21.2,
+      "evidence": -0.02393,
+      "provisionalWeight": 0
+    },
+    {
+      "key": "absorptionProxy",
+      "label": "Seller-to-buyer absorption proxy",
+      "count": 5,
+      "clean15": 0,
+      "clean30": 20,
+      "reachedByNoon": 80,
+      "clean15Lift": -22.2,
+      "noonLift": 13.3,
+      "evidence": -0.08254,
+      "provisionalWeight": 0
+    },
+    {
+      "key": "litParticipation",
+      "label": "Off-exchange share drops at reclaim",
+      "count": 11,
+      "clean15": 18.2,
+      "clean30": 27.3,
+      "reachedByNoon": 63.6,
+      "clean15Lift": -4,
+      "noonLift": -3,
+      "evidence": -0.03162,
+      "provisionalWeight": 0
+    },
+    {
+      "key": "volumeAcceleration",
+      "label": "Volume rate at least 1.5×",
+      "count": 7,
+      "clean15": 14.3,
+      "clean30": 14.3,
+      "reachedByNoon": 71.4,
+      "clean15Lift": -7.9,
+      "noonLift": 4.8,
+      "evidence": -0.0321,
+      "provisionalWeight": 0
+    }
+  ],
+  "volumeAnalysis": {
+    "exactEvents": 27,
+    "absorptionProxy": {
+      "count": 5,
+      "clean15Pct": 0,
+      "noonPct": 80
+    },
+    "acceptedReclaim30Seconds": {
+      "count": 10,
+      "clean15Pct": 50,
+      "noonPct": 60
+    },
+    "falseReclaim30Seconds": {
+      "count": 5,
+      "clean15Pct": 0,
+      "missedTargetPct": 20
+    },
+    "accepted70FiveMinutes": {
+      "count": 9,
+      "clean15Pct": 55.6,
+      "noonPct": 55.6
+    },
+    "falseReclaimFiveMinutes": {
+      "count": 12,
+      "missedTargetPct": 33.3
+    },
+    "orbHighRejection": {
+      "targetTouches": 18,
+      "rejectedWithinFiveMinutes": 11,
+      "rejectedPct": 61.1
+    },
+    "definitions": {
+      "absorptionProxy": "Prior 30 seconds are sell-imbalanced, yet price loses no more than 5% of one ORB range and the following 30 seconds recover. This indicates limited downside progress under selling; it does not prove hidden limit-order absorption.",
+      "acceptedReclaim30Seconds": "The following 30 seconds finish above 0.70 without trading more than 5% of one ORB range below it.",
+      "falseReclaim30Seconds": "The following 30 seconds finish below 0.70 after trading more than 5% of one ORB range below it.",
+      "accepted70FiveMinutes": "No price-forming trade more than 5% of one ORB range below 0.70 during the next five minutes.",
+      "falseReclaimFiveMinutes": "A price-forming trade moves more than 10% of one ORB range below 0.70 during the next five minutes.",
+      "orbHighRejection": "After the ORB high is touched, the fifth subsequent one-minute close is below the ORB high."
+    }
+  },
+  "sessions": [
+    {
+      "date": "2026-07-27",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -45.44,
+        "maeR": 5.403,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 55.484,
+          "delta": 5511.847,
+          "volume": 50253.214,
+          "offExchange": 53.466,
+          "block": 1.99,
+          "prints": 1068,
+          "firstPrice": 522.075,
+          "lastPrice": 522.025,
+          "high": 522.57,
+          "low": 521.01
+        },
+        "cross": {
+          "buyShare": 45.499,
+          "delta": -1228.373,
+          "volume": 13650.807,
+          "offExchange": 70.2,
+          "block": 0,
+          "prints": 356,
+          "firstPrice": 521.84,
+          "lastPrice": 522.09,
+          "high": 522.5532,
+          "low": 521.315
+        },
+        "next": {
+          "buyShare": 56.71,
+          "delta": 6746.75,
+          "volume": 50771.093,
+          "offExchange": 54.844,
+          "block": 2.025,
+          "prints": 1249,
+          "firstPrice": 522.3699,
+          "lastPrice": 524.43,
+          "high": 524.43,
+          "low": 521.5
+        },
+        "volumeAcceleration": 0.815,
+        "priorImbalancePct": 10.968,
+        "crossImbalancePct": -9.002,
+        "nextImbalancePct": 13.42,
+        "priorPriceChangeR": -0.006,
+        "nextPriceChangeR": 0.245,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-07-28",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -0.61,
+        "maeR": 0.041,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": true,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 59.562,
+          "delta": 7634.472,
+          "volume": 40454.601,
+          "offExchange": 55.513,
+          "block": 9.191,
+          "prints": 939,
+          "firstPrice": 461.4501,
+          "lastPrice": 462.27,
+          "high": 462.27,
+          "low": 461.3
+        },
+        "cross": {
+          "buyShare": 61.302,
+          "delta": 3429.322,
+          "volume": 15491.604,
+          "offExchange": 75.671,
+          "block": 28.118,
+          "prints": 303,
+          "firstPrice": 462.125,
+          "lastPrice": 462.14,
+          "high": 462.4999,
+          "low": 462.05
+        },
+        "next": {
+          "buyShare": 51.571,
+          "delta": 1623.554,
+          "volume": 52061.191,
+          "offExchange": 66.29,
+          "block": 20.768,
+          "prints": 984,
+          "firstPrice": 462.29,
+          "lastPrice": 463.06,
+          "high": 463.2048,
+          "low": 462.06
+        },
+        "volumeAcceleration": 1.149,
+        "priorImbalancePct": 19.124,
+        "crossImbalancePct": 22.604,
+        "nextImbalancePct": 3.142,
+        "priorPriceChangeR": 0.055,
+        "nextPriceChangeR": 0.052,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": true,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -24.41,
+        "maeR": 3.255,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 50.336,
+          "delta": 335.408,
+          "volume": 50230.88,
+          "offExchange": 41.436,
+          "block": 3.697,
+          "prints": 1131,
+          "firstPrice": 448.03,
+          "lastPrice": 449.5,
+          "high": 449.54,
+          "low": 448.0275
+        },
+        "cross": {
+          "buyShare": 61.123,
+          "delta": 4778.764,
+          "volume": 21494.139,
+          "offExchange": 49.6,
+          "block": 15.874,
+          "prints": 452,
+          "firstPrice": 448.96,
+          "lastPrice": 449.69,
+          "high": 450.4899,
+          "low": 448.775
+        },
+        "next": {
+          "buyShare": 53.176,
+          "delta": 2764.934,
+          "volume": 43805.145,
+          "offExchange": 45.799,
+          "block": 12.355,
+          "prints": 1028,
+          "firstPrice": 449.86,
+          "lastPrice": 449.7793,
+          "high": 450.4899,
+          "low": 448.84
+        },
+        "volumeAcceleration": 1.284,
+        "priorImbalancePct": 0.672,
+        "crossImbalancePct": 22.246,
+        "nextImbalancePct": 6.352,
+        "priorPriceChangeR": 0.196,
+        "nextPriceChangeR": -0.011,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": true,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-07-30",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 5,
+        "maeDollars": -1.435,
+        "maeR": 0.167,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": true,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 34.831,
+          "delta": -17631.242,
+          "volume": 58464.53,
+          "offExchange": 55.282,
+          "block": 10.434,
+          "prints": 1215,
+          "firstPrice": 461.385,
+          "lastPrice": 460.25,
+          "high": 462.72,
+          "low": 460.25
+        },
+        "cross": {
+          "buyShare": 25.543,
+          "delta": -10104.537,
+          "volume": 20684.119,
+          "offExchange": 42.458,
+          "block": 14.504,
+          "prints": 414,
+          "firstPrice": 461.31,
+          "lastPrice": 460.45,
+          "high": 461.59,
+          "low": 460.25
+        },
+        "next": {
+          "buyShare": 47.47,
+          "delta": -3548.143,
+          "volume": 70711.301,
+          "offExchange": 44.21,
+          "block": 2.722,
+          "prints": 1453,
+          "firstPrice": 460.655,
+          "lastPrice": 460.48,
+          "high": 461.24,
+          "low": 459.2576
+        },
+        "volumeAcceleration": 1.061,
+        "priorImbalancePct": -30.338,
+        "crossImbalancePct": -48.914,
+        "nextImbalancePct": -5.06,
+        "priorPriceChangeR": -0.132,
+        "nextPriceChangeR": -0.02,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-07-31",
+      "setupType": "bottom_reversal_during_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 4.02,
+        "maeDollars": -3.96,
+        "maeR": 0.449,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": false,
+        "elevatedEventVolume": true,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 90.607,
+          "delta": 332239.456,
+          "volume": 430577.053,
+          "offExchange": 2.772,
+          "block": 80.858,
+          "prints": 3477,
+          "firstPrice": 510.275,
+          "lastPrice": 507,
+          "high": 511,
+          "low": 506.8
+        },
+        "cross": {
+          "buyShare": 84.384,
+          "delta": 339380.015,
+          "volume": 506569.66,
+          "offExchange": 11.073,
+          "block": 70.419,
+          "prints": 5994,
+          "firstPrice": 510.275,
+          "lastPrice": 509.21,
+          "high": 511,
+          "low": 506.8
+        },
+        "next": {
+          "buyShare": 54.629,
+          "delta": 20807.758,
+          "volume": 225659.012,
+          "offExchange": 50.438,
+          "block": 7.155,
+          "prints": 5623,
+          "firstPrice": 510.86,
+          "lastPrice": 514.02,
+          "high": 514.8582,
+          "low": 506.9
+        },
+        "volumeAcceleration": 3.529,
+        "priorImbalancePct": 81.214,
+        "crossImbalancePct": 68.768,
+        "nextImbalancePct": 9.258,
+        "priorPriceChangeR": -0.371,
+        "nextPriceChangeR": 0.358,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-03",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 1.15,
+        "maeDollars": -1.021,
+        "maeR": 0.108,
+        "clean15": false,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 49.295,
+          "delta": -830.904,
+          "volume": 59687.712,
+          "offExchange": 57.861,
+          "block": 6.702,
+          "prints": 1350,
+          "firstPrice": 458.48,
+          "lastPrice": 458.125,
+          "high": 459.57,
+          "low": 457.77
+        },
+        "cross": {
+          "buyShare": 46.977,
+          "delta": -1417.779,
+          "volume": 24419.485,
+          "offExchange": 47.071,
+          "block": 0,
+          "prints": 529,
+          "firstPrice": 458.28,
+          "lastPrice": 458.08,
+          "high": 458.7699,
+          "low": 457.1992
+        },
+        "next": {
+          "buyShare": 50.329,
+          "delta": 563.968,
+          "volume": 87384.732,
+          "offExchange": 55.064,
+          "block": 7.438,
+          "prints": 1851,
+          "firstPrice": 458.22,
+          "lastPrice": 461.05,
+          "high": 461.39,
+          "low": 457.1992
+        },
+        "volumeAcceleration": 1.227,
+        "priorImbalancePct": -1.41,
+        "crossImbalancePct": -6.046,
+        "nextImbalancePct": 0.658,
+        "priorPriceChangeR": -0.038,
+        "nextPriceChangeR": 0.3,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": true,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-04",
+      "setupType": "bottom_reversal_during_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 3.56,
+        "maeDollars": -0.36,
+        "maeR": 0.039,
+        "clean15": true,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": false,
+        "elevatedEventVolume": true,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 75.917,
+          "delta": 201057.506,
+          "volume": 391617.616,
+          "offExchange": 16.414,
+          "block": 54.117,
+          "prints": 6178,
+          "firstPrice": 504,
+          "lastPrice": 504.71,
+          "high": 505.4894,
+          "low": 502.2
+        },
+        "cross": {
+          "buyShare": 56.591,
+          "delta": 7003.756,
+          "volume": 53128.731,
+          "offExchange": 35.191,
+          "block": 5.927,
+          "prints": 988,
+          "firstPrice": 503.52,
+          "lastPrice": 506.1383,
+          "high": 506.63,
+          "low": 503.28
+        },
+        "next": {
+          "buyShare": 64.284,
+          "delta": 50650.702,
+          "volume": 179777.313,
+          "offExchange": 50.434,
+          "block": 29.496,
+          "prints": 2889,
+          "firstPrice": 505,
+          "lastPrice": 508.06,
+          "high": 508.9,
+          "low": 504.64
+        },
+        "volumeAcceleration": 0.407,
+        "priorImbalancePct": 51.834,
+        "crossImbalancePct": 13.182,
+        "nextImbalancePct": 28.568,
+        "priorPriceChangeR": 0.076,
+        "nextPriceChangeR": 0.329,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-05",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 0,
+        "maeDollars": 0,
+        "maeR": 0,
+        "clean15": true,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": true,
+        "elevatedEventVolume": true,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 46.849,
+          "delta": -16224.499,
+          "volume": 272644.339,
+          "offExchange": 50.804,
+          "block": 10.3,
+          "prints": 6182,
+          "firstPrice": 500.79,
+          "lastPrice": 483.35,
+          "high": 502,
+          "low": 482.59
+        },
+        "cross": {
+          "buyShare": 47.678,
+          "delta": -2587.764,
+          "volume": 68006.851,
+          "offExchange": 62.235,
+          "block": 17.556,
+          "prints": 1206,
+          "firstPrice": 500.49,
+          "lastPrice": 500.01,
+          "high": 501.01,
+          "low": 482.4
+        },
+        "next": {
+          "buyShare": 39.442,
+          "delta": -53123.22,
+          "volume": 255501.82,
+          "offExchange": 56.812,
+          "block": 14.582,
+          "prints": 5064,
+          "firstPrice": 500.574,
+          "lastPrice": 496,
+          "high": 501.01,
+          "low": 482.4
+        },
+        "volumeAcceleration": 0.748,
+        "priorImbalancePct": -6.302,
+        "crossImbalancePct": -4.644,
+        "nextImbalancePct": -21.116,
+        "priorPriceChangeR": -1.232,
+        "nextPriceChangeR": -0.323,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": true,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-06",
+      "setupType": "bottom_reversal_during_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 4.81,
+        "maeDollars": -3.2,
+        "maeR": 0.281,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 68.525,
+          "delta": 154602.669,
+          "volume": 425420.127,
+          "offExchange": 13.713,
+          "block": 49.545,
+          "prints": 9993,
+          "firstPrice": 471.75,
+          "lastPrice": 472.85,
+          "high": 472.9,
+          "low": 469.5
+        },
+        "cross": {
+          "buyShare": 51.671,
+          "delta": 2537.697,
+          "volume": 76188.965,
+          "offExchange": 34.263,
+          "block": 7.618,
+          "prints": 1818,
+          "firstPrice": 471.05,
+          "lastPrice": 473.87,
+          "high": 474,
+          "low": 469.8
+        },
+        "next": {
+          "buyShare": 53.905,
+          "delta": 16455.929,
+          "volume": 212011.105,
+          "offExchange": 32.412,
+          "block": 17.17,
+          "prints": 3395,
+          "firstPrice": 473,
+          "lastPrice": 476.2701,
+          "high": 477.565,
+          "low": 469.8
+        },
+        "volumeAcceleration": 0.537,
+        "priorImbalancePct": 37.05,
+        "crossImbalancePct": 3.342,
+        "nextImbalancePct": 7.81,
+        "priorPriceChangeR": 0.097,
+        "nextPriceChangeR": 0.287,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-10",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 10,
+        "maeDollars": -2.33,
+        "maeR": 0.334,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 45.184,
+          "delta": -5575.919,
+          "volume": 58607.852,
+          "offExchange": 53.892,
+          "block": 7.46,
+          "prints": 1574,
+          "firstPrice": 472.26,
+          "lastPrice": 472.94,
+          "high": 473,
+          "low": 471.22
+        },
+        "cross": {
+          "buyShare": 40.574,
+          "delta": -4170.865,
+          "volume": 22123.556,
+          "offExchange": 66.05,
+          "block": 31.64,
+          "prints": 461,
+          "firstPrice": 472.57,
+          "lastPrice": 473,
+          "high": 473.01,
+          "low": 472.01
+        },
+        "next": {
+          "buyShare": 43.246,
+          "delta": -7358.203,
+          "volume": 54579.443,
+          "offExchange": 66.854,
+          "block": 13.375,
+          "prints": 1369,
+          "firstPrice": 473.01,
+          "lastPrice": 473.23,
+          "high": 474.1632,
+          "low": 472.5
+        },
+        "volumeAcceleration": 1.132,
+        "priorImbalancePct": -9.632,
+        "crossImbalancePct": -18.852,
+        "nextImbalancePct": -13.508,
+        "priorPriceChangeR": 0.098,
+        "nextPriceChangeR": 0.032,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": true,
+        "litParticipationShift": false,
+        "blockShareSurge": true,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-11",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -1.08,
+        "maeR": 0.102,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 43.913,
+          "delta": -5647.81,
+          "volume": 46593.064,
+          "offExchange": 60.767,
+          "block": 10.946,
+          "prints": 1090,
+          "firstPrice": 467.075,
+          "lastPrice": 467.55,
+          "high": 467.55,
+          "low": 466.69
+        },
+        "cross": {
+          "buyShare": 59.218,
+          "delta": 3097.251,
+          "volume": 16805.346,
+          "offExchange": 54.836,
+          "block": 0,
+          "prints": 399,
+          "firstPrice": 467.26,
+          "lastPrice": 467.535,
+          "high": 467.9999,
+          "low": 467.0201
+        },
+        "next": {
+          "buyShare": 53.061,
+          "delta": 4328.492,
+          "volume": 70801.461,
+          "offExchange": 58.538,
+          "block": 20.762,
+          "prints": 1311,
+          "firstPrice": 467.59,
+          "lastPrice": 468.14,
+          "high": 468.33,
+          "low": 467.21
+        },
+        "volumeAcceleration": 1.082,
+        "priorImbalancePct": -12.174,
+        "crossImbalancePct": 18.436,
+        "nextImbalancePct": 6.122,
+        "priorPriceChangeR": 0.045,
+        "nextPriceChangeR": 0.052,
+        "imbalanceFlip": true,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": true,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-12",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 42,
+        "maeDollars": -0.42,
+        "maeR": 0.06,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 57.847,
+          "delta": 10622.674,
+          "volume": 67878.675,
+          "offExchange": 47.013,
+          "block": 15.766,
+          "prints": 1477,
+          "firstPrice": 483,
+          "lastPrice": 483.81,
+          "high": 483.83,
+          "low": 482.72
+        },
+        "cross": {
+          "buyShare": 60.786,
+          "delta": 5334.573,
+          "volume": 24837.785,
+          "offExchange": 56.836,
+          "block": 11.591,
+          "prints": 479,
+          "firstPrice": 483.7993,
+          "lastPrice": 484.01,
+          "high": 484.1999,
+          "low": 483.47
+        },
+        "next": {
+          "buyShare": 54.574,
+          "delta": 4841.415,
+          "volume": 53206.456,
+          "offExchange": 59.133,
+          "block": 7.29,
+          "prints": 1370,
+          "firstPrice": 483.87,
+          "lastPrice": 483.61,
+          "high": 484.25,
+          "low": 483.45
+        },
+        "volumeAcceleration": 1.098,
+        "priorImbalancePct": 15.694,
+        "crossImbalancePct": 21.572,
+        "nextImbalancePct": 9.148,
+        "priorPriceChangeR": 0.115,
+        "nextPriceChangeR": -0.037,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": true,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-14",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 3.81,
+        "maeDollars": -0.39,
+        "maeR": 0.051,
+        "clean15": true,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 62.792,
+          "delta": 11726.262,
+          "volume": 45907.705,
+          "offExchange": 58.972,
+          "block": 10.674,
+          "prints": 955,
+          "firstPrice": 485,
+          "lastPrice": 486.1301,
+          "high": 486.4875,
+          "low": 484.58
+        },
+        "cross": {
+          "buyShare": 50.982,
+          "delta": 400.427,
+          "volume": 20386.24,
+          "offExchange": 49.093,
+          "block": 0,
+          "prints": 428,
+          "firstPrice": 485.695,
+          "lastPrice": 486.825,
+          "high": 486.96,
+          "low": 485.02
+        },
+        "next": {
+          "buyShare": 54.223,
+          "delta": 5446.64,
+          "volume": 65095.312,
+          "offExchange": 56.445,
+          "block": 3.91,
+          "prints": 1205,
+          "firstPrice": 486.71,
+          "lastPrice": 486.92,
+          "high": 487.9099,
+          "low": 486.3804
+        },
+        "volumeAcceleration": 1.332,
+        "priorImbalancePct": 25.584,
+        "crossImbalancePct": 1.964,
+        "nextImbalancePct": 8.446,
+        "priorPriceChangeR": 0.148,
+        "nextPriceChangeR": 0.027,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-17",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 88,
+        "maeDollars": -0.92,
+        "maeR": 0.096,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 41.561,
+          "delta": -9793.003,
+          "volume": 58025.69,
+          "offExchange": 49.059,
+          "block": 11.011,
+          "prints": 1214,
+          "firstPrice": 510.7,
+          "lastPrice": 509.03,
+          "high": 511.372,
+          "low": 509.03
+        },
+        "cross": {
+          "buyShare": 38.882,
+          "delta": -3070.212,
+          "volume": 13808.409,
+          "offExchange": 57.301,
+          "block": 0,
+          "prints": 381,
+          "firstPrice": 509.885,
+          "lastPrice": 509.11,
+          "high": 509.92,
+          "low": 508.95
+        },
+        "next": {
+          "buyShare": 58.526,
+          "delta": 8784.248,
+          "volume": 51812.558,
+          "offExchange": 69.077,
+          "block": 24.911,
+          "prints": 1046,
+          "firstPrice": 509.25,
+          "lastPrice": 508.85,
+          "high": 509.6589,
+          "low": 508.5
+        },
+        "volumeAcceleration": 0.714,
+        "priorImbalancePct": -16.878,
+        "crossImbalancePct": -22.236,
+        "nextImbalancePct": 17.052,
+        "priorPriceChangeR": -0.175,
+        "nextPriceChangeR": -0.042,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": true,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-18",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -12.405,
+        "maeR": 1.891,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 42.392,
+          "delta": -6617.521,
+          "volume": 43606.9,
+          "offExchange": 54.968,
+          "block": 8.026,
+          "prints": 1167,
+          "firstPrice": 488.14,
+          "lastPrice": 487.1804,
+          "high": 488.4784,
+          "low": 487.18
+        },
+        "cross": {
+          "buyShare": 48.626,
+          "delta": -236.962,
+          "volume": 8636.208,
+          "offExchange": 47.836,
+          "block": 0,
+          "prints": 299,
+          "firstPrice": 487.5,
+          "lastPrice": 487.32,
+          "high": 487.7299,
+          "low": 487.1108
+        },
+        "next": {
+          "buyShare": 33.558,
+          "delta": -21332.864,
+          "volume": 65246.944,
+          "offExchange": 40.178,
+          "block": 15.734,
+          "prints": 1800,
+          "firstPrice": 487.38,
+          "lastPrice": 486.125,
+          "high": 487.6799,
+          "low": 485.7703
+        },
+        "volumeAcceleration": 0.594,
+        "priorImbalancePct": -15.216,
+        "crossImbalancePct": -2.748,
+        "nextImbalancePct": -32.884,
+        "priorPriceChangeR": -0.146,
+        "nextPriceChangeR": -0.191,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": true,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-19",
+      "setupType": "bottom_reversal_during_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 1.93,
+        "maeDollars": -1.42,
+        "maeR": 0.191,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 36.809,
+          "delta": -24924.551,
+          "volume": 94472.364,
+          "offExchange": 54.142,
+          "block": 17.62,
+          "prints": 1871,
+          "firstPrice": 481.4499,
+          "lastPrice": 481.43,
+          "high": 481.6975,
+          "low": 479.57
+        },
+        "cross": {
+          "buyShare": 53.148,
+          "delta": 1666.125,
+          "volume": 26765.825,
+          "offExchange": 50.795,
+          "block": 3.736,
+          "prints": 560,
+          "firstPrice": 480.62,
+          "lastPrice": 480.845,
+          "high": 481.9199,
+          "low": 480.62
+        },
+        "next": {
+          "buyShare": 47.525,
+          "delta": -3525.09,
+          "volume": 71425.053,
+          "offExchange": 44.47,
+          "block": 3.835,
+          "prints": 1474,
+          "firstPrice": 481.9199,
+          "lastPrice": 484.33,
+          "high": 484.33,
+          "low": 480.5
+        },
+        "volumeAcceleration": 0.85,
+        "priorImbalancePct": -26.382,
+        "crossImbalancePct": 6.296,
+        "nextImbalancePct": -4.95,
+        "priorPriceChangeR": -0.003,
+        "nextPriceChangeR": 0.324,
+        "imbalanceFlip": true,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": true,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-20",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -7.7,
+        "maeR": 0.977,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": true,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 39.561,
+          "delta": -10405.15,
+          "volume": 49836.331,
+          "offExchange": 67.574,
+          "block": 12.441,
+          "prints": 1176,
+          "firstPrice": 470.2527,
+          "lastPrice": 467.89,
+          "high": 470.68,
+          "low": 467.7497
+        },
+        "cross": {
+          "buyShare": 36.656,
+          "delta": -4134.829,
+          "volume": 15593.365,
+          "offExchange": 58.065,
+          "block": 7.696,
+          "prints": 406,
+          "firstPrice": 468.375,
+          "lastPrice": 467.89,
+          "high": 468.63,
+          "low": 467.5
+        },
+        "next": {
+          "buyShare": 53.922,
+          "delta": 2655.087,
+          "volume": 34048.473,
+          "offExchange": 72.986,
+          "block": 14.979,
+          "prints": 721,
+          "firstPrice": 467.97,
+          "lastPrice": 468.15,
+          "high": 469.33,
+          "low": 467.5
+        },
+        "volumeAcceleration": 0.939,
+        "priorImbalancePct": -20.878,
+        "crossImbalancePct": -26.688,
+        "nextImbalancePct": 7.844,
+        "priorPriceChangeR": -0.3,
+        "nextPriceChangeR": 0.023,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-24",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -2.385,
+        "maeR": 0.25,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 51.185,
+          "delta": 184.807,
+          "volume": 7872.96,
+          "offExchange": 65.845,
+          "block": 0,
+          "prints": 332,
+          "firstPrice": 461.39,
+          "lastPrice": 461.81,
+          "high": 461.81,
+          "low": 461.39
+        },
+        "cross": {
+          "buyShare": 71.37,
+          "delta": 3398.852,
+          "volume": 7953.484,
+          "offExchange": 43.723,
+          "block": 0,
+          "prints": 251,
+          "firstPrice": 461.81,
+          "lastPrice": 461.94,
+          "high": 462.07,
+          "low": 461.81
+        },
+        "next": {
+          "buyShare": 60.812,
+          "delta": 4092.646,
+          "volume": 19425.842,
+          "offExchange": 57.186,
+          "block": 5.148,
+          "prints": 580,
+          "firstPrice": 461.9648,
+          "lastPrice": 462.22,
+          "high": 462.22,
+          "low": 461.86
+        },
+        "volumeAcceleration": 3.031,
+        "priorImbalancePct": 2.37,
+        "crossImbalancePct": 42.74,
+        "nextImbalancePct": 21.624,
+        "priorPriceChangeR": 0.044,
+        "nextPriceChangeR": 0.027,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-25",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 10,
+        "maeDollars": -0.355,
+        "maeR": 0.039,
+        "clean15": true,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 47.434,
+          "delta": -4161.797,
+          "volume": 82044.421,
+          "offExchange": 47.739,
+          "block": 10.956,
+          "prints": 1727,
+          "firstPrice": 474.08,
+          "lastPrice": 471.72,
+          "high": 474.375,
+          "low": 471.68
+        },
+        "cross": {
+          "buyShare": 45.122,
+          "delta": -3896.434,
+          "volume": 40222.402,
+          "offExchange": 56.668,
+          "block": 2.486,
+          "prints": 797,
+          "firstPrice": 472.88,
+          "lastPrice": 472.465,
+          "high": 473.1299,
+          "low": 471.6
+        },
+        "next": {
+          "buyShare": 43.049,
+          "delta": -8608.344,
+          "volume": 62133.364,
+          "offExchange": 50.407,
+          "block": 5.633,
+          "prints": 1200,
+          "firstPrice": 471.955,
+          "lastPrice": 472.02,
+          "high": 472.92,
+          "low": 471.6
+        },
+        "volumeAcceleration": 1.471,
+        "priorImbalancePct": -5.132,
+        "crossImbalancePct": -9.756,
+        "nextImbalancePct": -13.902,
+        "priorPriceChangeR": -0.261,
+        "nextPriceChangeR": 0.007,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-26",
+      "setupType": "bottom_reversal_during_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 4.13,
+        "maeDollars": -0.17,
+        "maeR": 0.016,
+        "clean15": true,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 87.276,
+          "delta": 137498.705,
+          "volume": 187634.441,
+          "offExchange": 11.974,
+          "block": 71.456,
+          "prints": 2833,
+          "firstPrice": 475.07,
+          "lastPrice": 477.296,
+          "high": 477.7,
+          "low": 474.58
+        },
+        "cross": {
+          "buyShare": 62.513,
+          "delta": 7128.164,
+          "volume": 28487.023,
+          "offExchange": 24.095,
+          "block": 26.229,
+          "prints": 606,
+          "firstPrice": 476.985,
+          "lastPrice": 478.315,
+          "high": 478.5,
+          "low": 476.98
+        },
+        "next": {
+          "buyShare": 50.236,
+          "delta": 247.938,
+          "volume": 60728.192,
+          "offExchange": 35.613,
+          "block": 15.597,
+          "prints": 1313,
+          "firstPrice": 478,
+          "lastPrice": 479.475,
+          "high": 479.7276,
+          "low": 477.83
+        },
+        "volumeAcceleration": 0.455,
+        "priorImbalancePct": 74.552,
+        "crossImbalancePct": 25.026,
+        "nextImbalancePct": 0.472,
+        "priorPriceChangeR": 0.21,
+        "nextPriceChangeR": 0.139,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-27",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -4.23,
+        "maeR": 0.392,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 55.359,
+          "delta": 5613.076,
+          "volume": 53274.864,
+          "offExchange": 57.477,
+          "block": 9.385,
+          "prints": 1444,
+          "firstPrice": 474.1275,
+          "lastPrice": 475.43,
+          "high": 475.44,
+          "low": 473.63
+        },
+        "cross": {
+          "buyShare": 69.276,
+          "delta": 9019.284,
+          "volume": 23399.232,
+          "offExchange": 58.17,
+          "block": 21.368,
+          "prints": 444,
+          "firstPrice": 474.385,
+          "lastPrice": 475.686,
+          "high": 475.9876,
+          "low": 474.33
+        },
+        "next": {
+          "buyShare": 54.85,
+          "delta": 5868.12,
+          "volume": 61436.528,
+          "offExchange": 56.698,
+          "block": 9.929,
+          "prints": 1339,
+          "firstPrice": 475.55,
+          "lastPrice": 476.355,
+          "high": 476.7263,
+          "low": 475.19
+        },
+        "volumeAcceleration": 1.318,
+        "priorImbalancePct": 10.718,
+        "crossImbalancePct": 38.552,
+        "nextImbalancePct": 9.7,
+        "priorPriceChangeR": 0.121,
+        "nextPriceChangeR": 0.075,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": true,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-08-28",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 2.45,
+        "maeDollars": -1.19,
+        "maeR": 0.274,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": true,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 47.822,
+          "delta": -881.912,
+          "volume": 20278.345,
+          "offExchange": 51.53,
+          "block": 9.863,
+          "prints": 589,
+          "firstPrice": 471.49,
+          "lastPrice": 470.85,
+          "high": 472.365,
+          "low": 470.85
+        },
+        "cross": {
+          "buyShare": 42.307,
+          "delta": -5020.339,
+          "volume": 32722.979,
+          "offExchange": 24.741,
+          "block": 3.056,
+          "prints": 628,
+          "firstPrice": 472,
+          "lastPrice": 470.15,
+          "high": 472,
+          "low": 470.08
+        },
+        "next": {
+          "buyShare": 38.924,
+          "delta": -27029.795,
+          "volume": 122134.001,
+          "offExchange": 34.602,
+          "block": 18.476,
+          "prints": 1856,
+          "firstPrice": 470.99,
+          "lastPrice": 471.395,
+          "high": 471.5283,
+          "low": 469.8
+        },
+        "volumeAcceleration": 4.841,
+        "priorImbalancePct": -4.356,
+        "crossImbalancePct": -15.386,
+        "nextImbalancePct": -22.152,
+        "priorPriceChangeR": -0.147,
+        "nextPriceChangeR": 0.093,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-08-31",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": false,
+        "targetMinutes": null,
+        "maeDollars": -1.855,
+        "maeR": 0.153,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": true,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 47.113,
+          "delta": -824.634,
+          "volume": 14614.738,
+          "offExchange": 51.186,
+          "block": 0,
+          "prints": 389,
+          "firstPrice": 466.8,
+          "lastPrice": 467.3,
+          "high": 467.3,
+          "low": 466.42
+        },
+        "cross": {
+          "buyShare": 59.514,
+          "delta": 2830.297,
+          "volume": 14875.725,
+          "offExchange": 62.718,
+          "block": 10.084,
+          "prints": 306,
+          "firstPrice": 466.6,
+          "lastPrice": 466.96,
+          "high": 467.4167,
+          "low": 466.42
+        },
+        "next": {
+          "buyShare": 53.243,
+          "delta": 1847.912,
+          "volume": 28694.489,
+          "offExchange": 64.767,
+          "block": 9.061,
+          "prints": 542,
+          "firstPrice": 467.355,
+          "lastPrice": 467.17,
+          "high": 467.69,
+          "low": 466.8335
+        },
+        "volumeAcceleration": 3.054,
+        "priorImbalancePct": -5.774,
+        "crossImbalancePct": 19.028,
+        "nextImbalancePct": 6.486,
+        "priorPriceChangeR": 0.041,
+        "nextPriceChangeR": -0.015,
+        "imbalanceFlip": true,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": true,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": false,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-09-01",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 130,
+        "maeDollars": -5.2,
+        "maeR": 1.01,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": false,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 33.809,
+          "delta": -11420.32,
+          "volume": 36048.369,
+          "offExchange": 62.062,
+          "block": 6.38,
+          "prints": 928,
+          "firstPrice": 457,
+          "lastPrice": 456.83,
+          "high": 457.5,
+          "low": 456.81
+        },
+        "cross": {
+          "buyShare": 45.721,
+          "delta": -974.352,
+          "volume": 12111.583,
+          "offExchange": 46.943,
+          "block": 0,
+          "prints": 366,
+          "firstPrice": 457.04,
+          "lastPrice": 457.91,
+          "high": 457.94,
+          "low": 456.81
+        },
+        "next": {
+          "buyShare": 55.567,
+          "delta": 6363.646,
+          "volume": 58703.218,
+          "offExchange": 45.182,
+          "block": 8.608,
+          "prints": 1297,
+          "firstPrice": 457.5,
+          "lastPrice": 458.18,
+          "high": 458.65,
+          "low": 457.2905
+        },
+        "volumeAcceleration": 1.008,
+        "priorImbalancePct": -32.382,
+        "crossImbalancePct": -8.558,
+        "nextImbalancePct": 11.134,
+        "priorPriceChangeR": -0.033,
+        "nextPriceChangeR": 0.132,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": true,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": true
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "setupType": "bullish_pullback",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 58,
+        "maeDollars": -5.19,
+        "maeR": 0.862,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": false,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": false,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": true,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 45.548,
+          "delta": -2075.825,
+          "volume": 23335.684,
+          "offExchange": 60.207,
+          "block": 18.285,
+          "prints": 560,
+          "firstPrice": 458.54,
+          "lastPrice": 457.5,
+          "high": 458.66,
+          "low": 457.5
+        },
+        "cross": {
+          "buyShare": 28.442,
+          "delta": -8773.551,
+          "volume": 20560.379,
+          "offExchange": 50.75,
+          "block": 10.579,
+          "prints": 352,
+          "firstPrice": 458.21,
+          "lastPrice": 457.205,
+          "high": 458.21,
+          "low": 457.03
+        },
+        "next": {
+          "buyShare": 46.743,
+          "delta": -2639.743,
+          "volume": 40821.826,
+          "offExchange": 59.414,
+          "block": 2.45,
+          "prints": 771,
+          "firstPrice": 457.55,
+          "lastPrice": 457.31,
+          "high": 457.8,
+          "low": 457.03
+        },
+        "volumeAcceleration": 2.643,
+        "priorImbalancePct": -8.904,
+        "crossImbalancePct": -43.116,
+        "nextImbalancePct": -6.514,
+        "priorPriceChangeR": -0.173,
+        "nextPriceChangeR": -0.04,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": true,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    },
+    {
+      "date": "2026-09-03",
+      "setupType": "bottom_reversal_post_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 81,
+        "maeDollars": -2.26,
+        "maeR": 0.222,
+        "clean15": false,
+        "clean30": false
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": false,
+        "strongClose": true,
+        "elevatedEventVolume": true,
+        "outperformedQqq": false,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": false
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 50.609,
+          "delta": 582.969,
+          "volume": 48378.262,
+          "offExchange": 62.94,
+          "block": 6.201,
+          "prints": 1239,
+          "firstPrice": 444.7799,
+          "lastPrice": 446.5,
+          "high": 446.55,
+          "low": 444.28
+        },
+        "cross": {
+          "buyShare": 47.231,
+          "delta": -1509.488,
+          "volume": 27261.304,
+          "offExchange": 61.818,
+          "block": 11.151,
+          "prints": 535,
+          "firstPrice": 446.2475,
+          "lastPrice": 446.4173,
+          "high": 446.63,
+          "low": 445.8903
+        },
+        "next": {
+          "buyShare": 45.029,
+          "delta": -6401.419,
+          "volume": 64686.35,
+          "offExchange": 62.314,
+          "block": 11.656,
+          "prints": 1410,
+          "firstPrice": 446.6,
+          "lastPrice": 446.49,
+          "high": 446.8399,
+          "low": 446.0001
+        },
+        "volumeAcceleration": 1.691,
+        "priorImbalancePct": 1.218,
+        "crossImbalancePct": -5.538,
+        "nextImbalancePct": -9.942,
+        "priorPriceChangeR": 0.169,
+        "nextPriceChangeR": -0.011,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": false,
+        "absorptionProxy": false,
+        "litParticipationShift": false,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": false,
+        "falseReclaim30Seconds": true,
+        "accepted70FiveMinutes": false,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": false
+      }
+    },
+    {
+      "date": "2026-09-04",
+      "setupType": "bottom_reversal_during_orb",
+      "outcome": {
+        "reachedByNoon": true,
+        "targetMinutes": 3.37,
+        "maeDollars": -0.304,
+        "maeR": 0.029,
+        "clean15": true,
+        "clean30": true
+      },
+      "context": {
+        "aboveVwap": true,
+        "positiveFromOpen": true,
+        "strongClose": true,
+        "elevatedEventVolume": true,
+        "outperformedQqq": true,
+        "positivePremarketRelativeToSmh": false,
+        "camWithin20R": true
+      },
+      "flow": {
+        "prior": {
+          "buyShare": 65.198,
+          "delta": 14118.663,
+          "volume": 46449.027,
+          "offExchange": 50.811,
+          "block": 18.945,
+          "prints": 1021,
+          "firstPrice": 458.29,
+          "lastPrice": 460.78,
+          "high": 461,
+          "low": 458.18
+        },
+        "cross": {
+          "buyShare": 65.514,
+          "delta": 15454.619,
+          "volume": 52733.005,
+          "offExchange": 33.984,
+          "block": 16.931,
+          "prints": 1103,
+          "firstPrice": 458.49,
+          "lastPrice": 463.1455,
+          "high": 463.2895,
+          "low": 458.49
+        },
+        "next": {
+          "buyShare": 62.718,
+          "delta": 41118.337,
+          "volume": 166618.035,
+          "offExchange": 46.894,
+          "block": 19.632,
+          "prints": 2976,
+          "firstPrice": 461.67,
+          "lastPrice": 464.8,
+          "high": 465.55,
+          "low": 461.3663
+        },
+        "volumeAcceleration": 3.406,
+        "priorImbalancePct": 30.396,
+        "crossImbalancePct": 31.028,
+        "nextImbalancePct": 25.436,
+        "priorPriceChangeR": 0.241,
+        "nextPriceChangeR": 0.303,
+        "imbalanceFlip": false,
+        "imbalancePersistent30s": true,
+        "absorptionProxy": false,
+        "litParticipationShift": true,
+        "blockShareSurge": false,
+        "acceptedReclaim30Seconds": true,
+        "falseReclaim30Seconds": false,
+        "accepted70FiveMinutes": true,
+        "falseReclaimFiveMinutes": false
+      },
+      "targetBehavior": {
+        "touchedOrbHigh": true,
+        "breakoutRejected5m": true
+      }
+    }
+  ]
+}
