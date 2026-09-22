@@ -1,34 +1,16 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { DM_Sans, DM_Mono, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const sans = DM_Sans({ variable: '--font-sans', subsets: ['latin'] });
+const mono = DM_Mono({ variable: '--font-mono', subsets: ['latin'], weight: ['400', '500'] });
+const serif = Instrument_Serif({ variable: '--font-serif', subsets: ['latin'], weight: '400' });
 
 export const metadata: Metadata = {
-  title: 'Pre-market Brief | TradeYodha',
-  description: 'Market context for the symbols on your watchlist before the opening bell.',
+  title: 'TradeYodha | Agentic Market Intelligence',
+  description: 'An AI research desk for active traders who want clearer market context around the levels they trade.',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en"><body className={`${sans.variable} ${mono.variable} ${serif.variable}`}>{children}</body></html>;
 }
