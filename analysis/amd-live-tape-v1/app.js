@@ -1,20 +1,14 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const canvas = $('chart'), ctx = canvas.getContext('2d');
-  const colors = {bg:'#0a1829', panel:'#12263a', grid:'#2b4359', text:'#ecf5ff', muted:'#9bb2c7', green:'#33d4a7', red:'#ff6c7d', amber:'#f3bc69', blue:'#80bafa'};
   const replaySpeeds = [1000, 2000, 5000, 10000, 15000, 30000, 60000];
-  const state = {mode:'replay', demo:null, live:null, index:162, timer:null, speed:1000, timeframe:1, analyticWindow:5, flowStart:'open', showPrice:false, hover:null};
+  const state = {mode:'replay', demo:null, live:null, index:162, timer:null, speed:1000, timeframe:1, analyticWindow:5, flowWindow:5, flowStart:'open'};
   const number = n => n == null ? '—' : Math.round(n).toLocaleString();
   const signed = (n, digits=0) => n == null ? '—' : `${n>0?'+':''}${Number(n).toFixed(digits)}`;
   const money = n => n == null ? '—' : `$${Number(n).toFixed(2)}`;
   const compact = n => n == null ? '—' : `${n>0?'+':n<0?'−':''}$${(Math.abs(n)/1e6).toFixed(1)}M`;
   const tone = (el, n) => {el.classList.remove('positive','negative');if(n>0)el.classList.add('positive');if(n<0)el.classList.add('negative')};
   const pairs = () => state.mode === 'replay' ? state.demo?.bars : state.live?.bars;
-  const visibleBars = amd => {
-    const open=state.flowStart==='open'&&!state.showPrice?amd.find(r=>r.t>='08:30')?.stampMs:null;
-    return (open==null?amd:amd.filter(r=>r.stampMs>=open)).slice(-70);
-  };
   const clockTime = stampMs => new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',hour:'2-digit',minute:'2-digit',hour12:false}).format(stampMs);
   function aggregate(source, minutes, cutoff){
     if(minutes===1)return source.filter(r=>r.stampMs+60000<=cutoff);
@@ -108,96 +102,56 @@
     $('net').textContent=compact(row?.netOutflowUsd);tone($('net'),-(row?.netOutflowUsd||0));
     $('freshness').textContent=state.mode==='live'?(state.live?.eventLagSeconds!=null?`Feed ${state.live.eventLagSeconds}s old · AMD bar ${row?Math.max(0,Math.round(Date.now()/1000-(row.stampMs/1000+60)))+'s old':'unavailable'}`:'No feed event yet'):'Recorded paired tape';
     renderAnalytics();
-    draw(amd,amdl);
+    renderFlow();
   }
-  function draw(amd,amdl){
-    const box=canvas.getBoundingClientRect(),w=Math.max(700,Math.floor(box.width)),h=Math.max(320,Math.floor(box.height));
-    const dpr=Math.min(2,devicePixelRatio||1);canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.fillStyle=colors.bg;ctx.fillRect(0,0,w,h);
-    const left=58,right=82,top=24,bottom=h-30,graphW=w-left-right;
-    const show=visibleBars(amd),amdlMap=new Map(amdl.map(r=>[r.stampMs,r]));
-    if(!show.length){ctx.fillStyle=colors.muted;ctx.font='15px system-ui';ctx.fillText(state.mode==='live'?'Waiting for complete one-minute AMD tape…':'Loading replay…',left+16,90);return}
-    const height=bottom-top;
-    const lanes=state.showPrice?[
-      {name:'AMD PRICE',a:top,b:top+height*.41},
-      {name:'CUMULATIVE CLASSIFIED SHARES',a:top+height*.43,b:top+height*.61},
-      {name:'RUNNING AMD BUYER − SELLER SHARES',a:top+height*.63,b:top+height*.77},
-      {name:'ROLLING QUOTE OFI · LAST 5 CANDLES',a:top+height*.79,b:top+height*.88},
-      {name:'RUNNING AMDL BUYER − SELLER SHARES',a:top+height*.9,b:bottom}]:[
-      {name:'CUMULATIVE CLASSIFIED SHARES',a:top,b:top+height*.28},
-      {name:'RUNNING AMD BUYER − SELLER SHARES',a:top+height*.30,b:top+height*.55},
-      {name:'ROLLING QUOTE OFI · LAST 5 CANDLES',a:top+height*.57,b:top+height*.78},
-      {name:'RUNNING AMDL BUYER − SELLER SHARES',a:top+height*.80,b:bottom}];
-    const priceLane=state.showPrice?lanes[0]:null;
-    const [sharesLane,deltaLane,ofiLane,etfLane]=lanes.slice(state.showPrice?1:0);
-    const n=show.length,step=graphW/n,x=i=>left+(i+.5)*step;
-    const label=(value,x,y,color=colors.muted,size=11)=>{ctx.fillStyle=color;ctx.font=`${size}px system-ui`;ctx.fillText(value,x,y)};
-    for(const lane of lanes){ctx.fillStyle=colors.panel;ctx.fillRect(left,lane.a,graphW,lane.b-lane.a);label(lane.name,left+7,lane.a+14,colors.muted,10)}
-    let lo=0,hi=1;
-    if(priceLane){
-      lo=Math.min(...show.map(r=>r.l).filter(Number.isFinite));hi=Math.max(...show.map(r=>r.h).filter(Number.isFinite));
-      if(!Number.isFinite(lo)||!Number.isFinite(hi)){lo=0;hi=1}const pad=Math.max(.2,(hi-lo)*.08);lo-=pad;hi+=pad;
+  function renderFlow(){
+    // Summaries always use complete one-minute bars, independent of the selected candle size.
+    const bars=pairs();
+    const amd=state.mode==='replay'?bars?.AMD.slice(0,state.index+1):bars?.AMD;
+    const amdl=state.mode==='replay'?bars?.AMDL.filter(r=>r.stampMs<=(amd?.at(-1)?.stampMs||0)):bars?.AMDL;
+    const last=amd?.at(-1);
+    const aligned=new Map((amdl||[]).map(r=>[r.stampMs,r]));
+    const recent=last?amd.filter(r=>r.stampMs>last.stampMs-state.flowWindow*60000):[];
+    const running=amd?.filter(r=>state.flowStart==='open'?r.t>='08:30':r.t>='06:00')||[];
+    function summary(rows){
+      if(!rows.length)return null;
+      const sum=(key)=>rows.reduce((total,row)=>total+(Number.isFinite(row[key])?row[key]:0),0);
+      const buy=sum('buy'),sell=sum('sell'),lit=sum('litShares');
+      const ofi=rows.map(r=>r.ofi).filter(Number.isFinite);
+      const mid=rows.map(r=>r.midMoveCents).filter(Number.isFinite);
+      return {first:rows[0],last:rows.at(-1),buy,sell,delta:buy-sell,imbalance:buy+sell?(buy-sell)/(buy+sell)*100:null,
+        coverage:lit?(buy+sell)/lit*100:null,ofi:ofi.length?ofi.reduce((a,b)=>a+b,0)/ofi.length:null,
+        price:rows.at(-1).c-rows[0].o,mid:mid.length?mid.reduce((a,b)=>a+b,0):null,
+        amdl:rows.reduce((total,row)=>total+(aligned.get(row.stampMs)?.delta||0),0),count:rows.length};
     }
-    const py=p=>priceLane.b-(p-lo)/(hi-lo)*(priceLane.b-priceLane.a);
-    if(priceLane)for(let k=0;k<=4;k++){let v=lo+(hi-lo)*k/4,yy=py(v);ctx.strokeStyle=colors.grid;ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(w-right,yy);ctx.stroke();label('$'+v.toFixed(2),w-right+5,yy+4)}
-    const open=amd.find(r=>r.t>='08:30')?.stampMs;
-    const start=state.flowStart==='open'&&open!=null?open:amd[0].stampMs;
-    const running=new Map();let buy=0,sell=0,etfDelta=0,etfIndex=0;
-    const rolling=[];
-    for(const r of amd){
-      if(r.stampMs<start)continue;
-      buy+=r.buy||0;sell+=r.sell||0;
-      while(etfIndex<amdl.length&&amdl[etfIndex].stampMs<=r.stampMs){
-        if(amdl[etfIndex].stampMs>=start)etfDelta+=amdl[etfIndex].delta||0;
-        etfIndex++;
-      }
-      rolling.push(r.ofi);
-      const recent=rolling.slice(-5).filter(Number.isFinite);
-      running.set(r.stampMs,{buy,sell,delta:buy-sell,ofi:recent.length?recent.reduce((a,b)=>a+b,0)/recent.length:null,etfDelta});
+    function update(prefix,rows){
+      const x=summary(rows),set=(name,value)=>$(prefix+'-'+name).textContent=value;
+      set('time',x?`${x.first.t}–${x.last.t} CT · ${x.count} bars`:'No completed tape');
+      set('delta',x?signed(x.delta)+' sh':'—');tone($(prefix+'-delta'),x?.delta);
+      set('shares',x?`${number(x.buy)} buyer / ${number(x.sell)} seller shares`:'—');
+      $(prefix+'-split').style.width=x&&x.buy+x.sell?`${x.buy/(x.buy+x.sell)*100}%`:'50%';
+      set('imbalance',x?.imbalance==null?'—':`${signed(x.imbalance,1)}%`);tone($(prefix+'-imbalance'),x?.imbalance);
+      set('ofi',signed(x?.ofi,3));tone($(prefix+'-ofi'),x?.ofi);
+      set('price',x?`${signed(x.price,2)} USD`:'—');tone($(prefix+'-price'),x?.price);
+      set('amdl',x?signed(x.amdl)+' sh':'—');tone($(prefix+'-amdl'),x?.amdl);
+      set('mid',x?.mid==null?'—':`${signed(x.mid,1)}¢`);tone($(prefix+'-mid'),x?.mid);
+      set('coverage',x?.coverage==null?'—':`${x.coverage.toFixed(1)}%`);
     }
-    const flow=show.map(r=>running.get(r.stampMs));
-    const short=n=>Math.abs(n)>=1e6?`${(n/1e6).toFixed(2)}M`:`${Math.round(n/1000)}K`;
-    function scale(values,minSpan=1){
-      let low=Math.min(...values.filter(Number.isFinite)),high=Math.max(...values.filter(Number.isFinite));
-      if(!Number.isFinite(low)||!Number.isFinite(high))return [0,minSpan];
-      const pad=Math.max(minSpan*.1,(high-low)*.12);return [low-pad,high+pad];
+    $('recent-title').textContent=`Last ${state.flowWindow} minutes`;
+    $('running-title').textContent=state.flowStart==='open'?'Since 08:30 open':'Since 06:00 session';
+    update('recent',recent);update('running',running);
+    const body=$('minute-tape');body.replaceChildren();
+    if(!last){const tr=body.insertRow(),td=tr.insertCell();td.colSpan=8;td.className='empty';td.textContent='Waiting for complete AMD tape';return}
+    for(const row of amd.slice(-8).reverse()){
+      const cells=[row.t,money(row.c),number(row.buy),number(row.sell),signed(row.delta),signed(row.ofi,3),row.midMoveCents==null?'—':signed(row.midMoveCents,1),signed(aligned.get(row.stampMs)?.delta)];
+      const tr=body.insertRow();cells.forEach((value,i)=>{const td=tr.insertCell();td.textContent=value;if([4,5,6,7].includes(i))tone(td,i===4?row.delta:i===5?row.ofi:i===6?row.midMoveCents:aligned.get(row.stampMs)?.delta)});
     }
-    function y(value,lane,range){return lane.b-7-(value-range[0])/(range[1]-range[0])*(lane.b-lane.a-34)}
-    function path(lane,range,key,color,width=2.5){
-      ctx.beginPath();let started=false;
-      flow.forEach((point,i)=>{const value=point?.[key];if(!Number.isFinite(value)){started=false;return}const xx=x(i),yy=y(value,lane,range);if(!started){ctx.moveTo(xx,yy);started=true}else ctx.lineTo(xx,yy)});
-      ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin='round';ctx.stroke();
-    }
-    function zero(lane,range){if(range[0]>0||range[1]<0)return;const yy=y(0,lane,range);ctx.strokeStyle=colors.grid;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(w-right,yy);ctx.stroke()}
-    const last=flow.findLast(Boolean);
-    const sharesRange=scale(flow.flatMap(p=>p?[p.buy,p.sell]:[]),1000);
-    const deltaRange=scale(flow.map(p=>p?.delta),1000);
-    const ofiRange=scale(flow.map(p=>p?.ofi),.15);
-    const etfRange=scale(flow.map(p=>p?.etfDelta),1000);
-    path(sharesLane,sharesRange,'buy',colors.green);path(sharesLane,sharesRange,'sell',colors.red);
-    zero(deltaLane,deltaRange);path(deltaLane,deltaRange,'delta',colors.blue,3);
-    zero(ofiLane,ofiRange);path(ofiLane,ofiRange,'ofi',colors.amber,3);
-    zero(etfLane,etfRange);path(etfLane,etfRange,'etfDelta',colors.blue,2.5);
-    if(last){
-      label(`BUY ${short(last.buy)}`,left+7,sharesLane.a+29,colors.green,11);label(`SELL ${short(last.sell)}`,left+118,sharesLane.a+29,colors.red,11);
-      label(`NET ${last.delta>=0?'+':''}${short(last.delta)}`,left+7,deltaLane.a+29,last.delta>=0?colors.green:colors.red,11);
-      if(last.ofi!=null)label(`5-candle avg ${signed(last.ofi,3)}`,left+7,ofiLane.a+29,last.ofi>=0?colors.green:colors.red,11);
-      label(`AMDL NET ${last.etfDelta>=0?'+':''}${short(last.etfDelta)}`,left+7,etfLane.a+29,last.etfDelta>=0?colors.green:colors.red,11);
-    }
-    show.forEach((r,i)=>{
-      if(r.c==null)return;const xx=x(i);
-      if(priceLane){const color=r.c>=r.o?colors.green:colors.red;
-        ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(xx,py(r.h));ctx.lineTo(xx,py(r.l));ctx.stroke();
-        const bodyWidth=Math.max(2,Math.min(14,step*.6));ctx.fillStyle=color;ctx.fillRect(xx-bodyWidth/2,Math.min(py(r.o),py(r.c)),bodyWidth,Math.max(2,Math.abs(py(r.o)-py(r.c))));}
-      if(i%Math.max(1,Math.ceil(90/step))===0)label(r.t,xx-13,h-9,colors.muted,10);
-    });
-    if(state.hover!=null&&state.hover>=0&&state.hover<show.length){const i=state.hover,xx=x(i);ctx.strokeStyle=colors.blue;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();ctx.setLineDash([]);const r=show[i],e=amdlMap.get(r.stampMs),p=flow[i];$('readout').textContent=`${r.t} CT · AMD ${money(r.c)} · buyer ${number(r.buy)} / seller ${number(r.sell)} · Δ ${signed(r.delta)} · running Δ ${signed(p?.delta)} · OFI ${signed(r.ofi,3)} · rolling OFI ${signed(p?.ofi,3)} · queue ${signed(r.queue,3)} · mid ${signed(r.midMoveCents,1)}¢ · AMDL Δ ${signed(e?.delta)} · coverage ${r.coveragePct==null?'—':r.coveragePct+'%'}`}
   }
   $('replay').onclick=replayMode;$('live').onclick=liveMode;
-  for(const minutes of [1,2,5])$('candle-'+minutes).onclick=()=>{state.timeframe=minutes;for(const value of [1,2,5])$('candle-'+value).classList.toggle('active',value===minutes);state.hover=null;render()};
+  for(const minutes of [1,2,5])$('candle-'+minutes).onclick=()=>{state.timeframe=minutes;for(const value of [1,2,5])$('candle-'+value).classList.toggle('active',value===minutes);render()};
   for(const minutes of [5,15])$('analytic-'+minutes).onclick=()=>{state.analyticWindow=minutes;for(const value of [5,15])$('analytic-'+value).classList.toggle('active',value===minutes);render()};
-  $('show-price').onclick=()=>{state.showPrice=!state.showPrice;$('show-price').classList.toggle('active',state.showPrice);$('show-price').textContent=state.showPrice?'Hide price chart':'Show price chart';render()};
-  for(const value of ['open','session'])$('flow-'+value).onclick=()=>{state.flowStart=value;for(const option of ['open','session'])$('flow-'+option).classList.toggle('active',option===value);state.hover=null;render()};
+  for(const value of ['open','session'])$('flow-'+value).onclick=()=>{state.flowStart=value;for(const option of ['open','session'])$('flow-'+option).classList.toggle('active',option===value);render()};
+  for(const minutes of [5,15,30])$('flow-'+minutes).onclick=()=>{state.flowWindow=minutes;for(const value of [5,15,30])$('flow-'+value).classList.toggle('active',value===minutes);render()};
   $('scrub').oninput=e=>{state.index=Number(e.target.value);render()};
   $('play').onclick=()=>{if(state.timer){stop();return}state.timer=setInterval(()=>{if(state.index>=state.demo.bars.AMD.length-1){stop();return}state.index++;render()},state.speed);$('play').textContent='❚❚ Pause'};
   function setSpeed(next){
@@ -209,9 +163,6 @@
   $('faster').onclick=()=>setSpeed(replaySpeeds[Math.max(0,replaySpeeds.indexOf(state.speed)-1)]);
   $('previous').onclick=()=>{stop();state.index=Math.max(0,state.index-1);render()};
   $('next').onclick=()=>{stop();state.index=Math.min(state.demo.bars.AMD.length-1,state.index+1);render()};
-  canvas.onmousemove=e=>{const show=visibleBars(current().amd),box=canvas.getBoundingClientRect(),w=Math.max(700,box.width),step=(w-140)/Math.max(show.length,1);state.hover=Math.floor((e.clientX-box.left-58)/step);render()};
-  canvas.onmouseleave=()=>{state.hover=null;$('readout').textContent='Hover over a candle to inspect the aligned indicators.';render()};
-  window.onresize=()=>render();
   if(window.AMD_LIVE_DEMO){state.demo=window.AMD_LIVE_DEMO;state.index=Math.min(162,state.demo.bars.AMD.length-1);replayMode()}
   else status('October 6 replay data unavailable','bad');
   setInterval(()=>{if(state.mode==='live')refreshLive()},2000);
