@@ -1,0 +1,312 @@
+{
+  "dates": [
+    "2026-08-25",
+    "2026-08-26",
+    "2026-08-27",
+    "2026-08-28",
+    "2026-08-31",
+    "2026-09-01",
+    "2026-09-02",
+    "2026-09-03",
+    "2026-09-04",
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10",
+    "2026-09-11",
+    "2026-09-14",
+    "2026-09-15",
+    "2026-09-16",
+    "2026-09-17",
+    "2026-09-18",
+    "2026-09-21",
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-25",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-05",
+    "2026-10-06"
+  ],
+  "sessions": [
+    {
+      "date": "2026-08-25",
+      "file": "replay/2026-08-25.json",
+      "sha256": "58a57545660eba82831a494908f1c69e555f97b30294a4fe83bbe6b98fbcf2fd",
+      "bars": {
+        "AMD": 293,
+        "AMDL": 297
+      }
+    },
+    {
+      "date": "2026-08-26",
+      "file": "replay/2026-08-26.json",
+      "sha256": "af02884533baf2e96c33377ca4264422f01f56df9ba04b0c96a35f39232e36e3",
+      "bars": {
+        "AMD": 285,
+        "AMDL": 299
+      }
+    },
+    {
+      "date": "2026-08-27",
+      "file": "replay/2026-08-27.json",
+      "sha256": "4277d4b6fd8830eb30fb2065df67ba5b6f87cd348768d15116a2020c53299a8e",
+      "bars": {
+        "AMD": 284,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-08-28",
+      "file": "replay/2026-08-28.json",
+      "sha256": "e39a27c0cd04d2a015f620d88b89646d0fb41c4a8768dde3098c661766a0614e",
+      "bars": {
+        "AMD": 239,
+        "AMDL": 299
+      }
+    },
+    {
+      "date": "2026-08-31",
+      "file": "replay/2026-08-31.json",
+      "sha256": "5dd24e92dbd0c96db304088f50bc4db8d0cd7018a404ea1961a20e28922902c5",
+      "bars": {
+        "AMD": 243,
+        "AMDL": 299
+      }
+    },
+    {
+      "date": "2026-09-01",
+      "file": "replay/2026-09-01.json",
+      "sha256": "3565349ed0cc79cd5444f8166251ef7b477123edcbe724a284a92402f0d04ddf",
+      "bars": {
+        "AMD": 279,
+        "AMDL": 299
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "file": "replay/2026-09-02.json",
+      "sha256": "4fa09f72515333f812f3978b5e9b63cbd91e800871ce9e4c56ab3bb960db7423",
+      "bars": {
+        "AMD": 271,
+        "AMDL": 295
+      }
+    },
+    {
+      "date": "2026-09-03",
+      "file": "replay/2026-09-03.json",
+      "sha256": "2ff84bbd6dd342b7cc30cc4f7dbfa3400d967ced0ff895fc0caf3da178925955",
+      "bars": {
+        "AMD": 275,
+        "AMDL": 299
+      }
+    },
+    {
+      "date": "2026-09-04",
+      "file": "replay/2026-09-04.json",
+      "sha256": "7fc3813822f9203f058e40e37b214da7c49015d6f20daeecec0f6d2bba5e9cf7",
+      "bars": {
+        "AMD": 279,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-08",
+      "file": "replay/2026-09-08.json",
+      "sha256": "865fac8f9ae7d4a3444ebe48aec97d2f613b8463433723e96772deab265a4bcf",
+      "bars": {
+        "AMD": 283,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-09",
+      "file": "replay/2026-09-09.json",
+      "sha256": "b8f96b9807a31245a80654c58120cabb5d912fd0e9c0b430493a5838436363f1",
+      "bars": {
+        "AMD": 271,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-10",
+      "file": "replay/2026-09-10.json",
+      "sha256": "cf3a1455e719ffe41c7b2a67f37d2d91a0ad9d78caafa4717a5b7930ab4bbab3",
+      "bars": {
+        "AMD": 293,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-11",
+      "file": "replay/2026-09-11.json",
+      "sha256": "bf7803950bc754173544f482931ebb98e41f1e128899640f7564445846ce6052",
+      "bars": {
+        "AMD": 285,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-14",
+      "file": "replay/2026-09-14.json",
+      "sha256": "e461836d95b52d279843ffd3bab4e7ab30391e7722ccb1fd95c116ec66890f19",
+      "bars": {
+        "AMD": 299,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-15",
+      "file": "replay/2026-09-15.json",
+      "sha256": "ed6fb6a817c90202600025aab989b334f6c1c37331d1fa053fa89d0c721c01d5",
+      "bars": {
+        "AMD": 285,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-16",
+      "file": "replay/2026-09-16.json",
+      "sha256": "7bc89d595c70e3cf2c34d73b43354b4c507359c4202dde1e4b1ae62663b47b0c",
+      "bars": {
+        "AMD": 279,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-17",
+      "file": "replay/2026-09-17.json",
+      "sha256": "5cd69851cc23eee314096148a8c91dc65976790718315f57146fe029abb245b6",
+      "bars": {
+        "AMD": 296,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-18",
+      "file": "replay/2026-09-18.json",
+      "sha256": "e1af9c31ea8d770087342346af4244da7251d9489a2fbcda421b12580d57f355",
+      "bars": {
+        "AMD": 287,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "file": "replay/2026-09-21.json",
+      "sha256": "c9a0bffbbc752a3ecde07d791871ddc31e05b0ed8712d7aac33f0924c9518a64",
+      "bars": {
+        "AMD": 297,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "file": "replay/2026-09-22.json",
+      "sha256": "ffb388c364a38850a2578ed513be9692e9965f9a93118951cdabed48d34e9ad3",
+      "bars": {
+        "AMD": 299,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "file": "replay/2026-09-23.json",
+      "sha256": "30d41e05da59ac20efeafc5bb7c04041beec9edabcb7fd263df82c7d83a3c4da",
+      "bars": {
+        "AMD": 291,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-24",
+      "file": "replay/2026-09-24.json",
+      "sha256": "e86d11480e7ce1e174415f2d58ccdfec2937598bdee8703f3962da60b27a880c",
+      "bars": {
+        "AMD": 296,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-25",
+      "file": "replay/2026-09-25.json",
+      "sha256": "e1cfb82f44fab3173d6968c4a1fa4299d3a817bafc928e2fc8e7e7b75148390a",
+      "bars": {
+        "AMD": 297,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-28",
+      "file": "replay/2026-09-28.json",
+      "sha256": "5da639b6622ed0caf77ff6e2dd6720ed7a629ff784137722f267c0974c3b5713",
+      "bars": {
+        "AMD": 293,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-29",
+      "file": "replay/2026-09-29.json",
+      "sha256": "46546c6a8a03e39fa6a8320e30c860ed60b5d2547955e09b8695b150d27a6a78",
+      "bars": {
+        "AMD": 291,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-09-30",
+      "file": "replay/2026-09-30.json",
+      "sha256": "cd0401114eda81fc1b73eb38b4da78ddc5e463e4cb99a9778dc63eb9352118b2",
+      "bars": {
+        "AMD": 286,
+        "AMDL": 299
+      }
+    },
+    {
+      "date": "2026-10-01",
+      "file": "replay/2026-10-01.json",
+      "sha256": "5367e2ec8b7586d62e52a17a00fa754f3f0679161f1928a6cedbe68a4c2a892b",
+      "bars": {
+        "AMD": 282,
+        "AMDL": 297
+      }
+    },
+    {
+      "date": "2026-10-02",
+      "file": "replay/2026-10-02.json",
+      "sha256": "e5a40db2be524c7b6a918995bf76a8aae5bc76639e015093cc46681f937e2635",
+      "bars": {
+        "AMD": 292,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-10-05",
+      "file": "replay/2026-10-05.json",
+      "sha256": "ebc4ea7ff04f506aa299775807ec817a18dd81391a78c488333716de5c876856",
+      "bars": {
+        "AMD": 277,
+        "AMDL": 300
+      }
+    },
+    {
+      "date": "2026-10-06",
+      "file": "replay/2026-10-06.json",
+      "sha256": "a3e2b957aa281ef4c95eb59b98683da931af1e1073ff4c9198c938718215f8e3",
+      "bars": {
+        "AMD": 297,
+        "AMDL": 275
+      }
+    }
+  ],
+  "windowCt": [
+    "06:00",
+    "11:00"
+  ],
+  "source": "Derived only from the existing verified AMD/AMDL 30-session browser",
+  "limitation": "Exact classified dollar pressure and AMDL quote-depth features are not available in this processed source"
+}

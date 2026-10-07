@@ -2,7 +2,7 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const replaySpeeds = [1000, 2000, 5000, 10000, 15000, 30000, 60000];
-  const state = {mode:'replay', demo:null, live:null, index:162, timer:null, speed:1000, timeframe:1, analyticWindow:5, flowWindow:5, flowStart:'open'};
+  const state = {mode:'replay', demo:null, live:null, index:0, timer:null, speed:1000, timeframe:1, analyticWindow:5, flowWindow:5, flowStart:'open', replayDates:[]};
   const number = n => n == null ? '—' : Math.round(n).toLocaleString();
   const signed = (n, digits=0) => n == null ? '—' : `${n>0?'+':''}${Number(n).toFixed(digits)}`;
   const money = n => n == null ? '—' : `$${Number(n).toFixed(2)}`;
@@ -23,9 +23,10 @@
     const mean=(rows,key)=>{const values=rows.map(r=>r[key]).filter(Number.isFinite);return values.length?values.reduce((a,b)=>a+b,0)/values.length:null};
     return [...buckets].sort((a,b)=>a[0]-b[0]).map(([stampMs,rows])=>{
       const last=rows.at(-1),litShares=sum(rows,'litShares'),buy=sum(rows,'buy'),sell=sum(rows,'sell');
-      return {t:clockTime(stampMs),stampMs,o:rows[0].o,h:Math.max(...rows.map(r=>r.h)),l:Math.min(...rows.map(r=>r.l)),c:last.c,
+      const priced=rows.filter(r=>Number.isFinite(r.c));
+      return {t:clockTime(stampMs),stampMs,o:priced[0]?.o??null,h:priced.length?Math.max(...priced.map(r=>r.h)):null,l:priced.length?Math.min(...priced.map(r=>r.l)):null,c:priced.at(-1)?.c??null,
         litShares,buy,sell,delta:buy-sell,imbalancePct:buy+sell?(buy-sell)/(buy+sell)*100:null,
-        coveragePct:litShares?(buy+sell)/litShares*100:null,netOutflowUsd:sum(rows,'netOutflowUsd'),
+        coveragePct:litShares?(buy+sell)/litShares*100:null,netOutflowUsd:rows.some(r=>Number.isFinite(r.netOutflowUsd))?sum(rows,'netOutflowUsd'):null,
         ofi:mean(rows,'ofi'),queue:last.queue,medianSpreadCents:mean(rows,'medianSpreadCents'),
         midMoveCents:rows.some(r=>Number.isFinite(r.midMoveCents))?sum(rows,'midMoveCents'):null,quoteAgeMs:last.quoteAgeMs};
     });
@@ -59,7 +60,7 @@
   }
   function replayMode(){
     state.mode='replay';$('replay').classList.add('active');$('live').classList.remove('active');
-    $('replay-controls').hidden=false;$('mode-note').textContent='Recorded October 6 session · slider reveals only completed earlier minutes';
+    $('replay-controls').hidden=false;$('mode-note').textContent='Archived 06:00–11:00 CT tape · slider reveals only completed earlier minutes';
     stop();render();
   }
   function liveMode(){
@@ -68,6 +69,32 @@
     stop();refreshLive();render();
   }
   function stop(){if(state.timer){clearInterval(state.timer);state.timer=null}$('play').textContent='▶ Play'}
+  async function loadReplay(date,atEnd=false){
+    if(!state.replayDates.includes(date))throw new Error('Session is not in the verified replay manifest');
+    stop();status(`Loading ${date} replay…`,'warn');
+    const response=await fetch(`replay/${date}.json`,{cache:'no-store',signal:AbortSignal.timeout(15000)});
+    if(!response.ok)throw new Error(`Replay HTTP ${response.status}`);
+    const payload=await response.json();
+    if(payload.date!==date||!Array.isArray(payload.bars?.AMD)||!Array.isArray(payload.bars?.AMDL))throw new Error('Replay session does not match its date');
+    state.demo=payload;
+    state.index=atEnd?payload.bars.AMD.length-1:Math.max(0,payload.bars.AMD.findIndex(row=>row.t>='08:45'));
+    $('replay-date').value=date;
+    replayMode();
+  }
+  async function loadLibrary(){
+    try{
+      const response=await fetch('replay-manifest.json',{cache:'no-store',signal:AbortSignal.timeout(15000)});
+      if(!response.ok)throw new Error(`Replay manifest HTTP ${response.status}`);
+      const manifest=await response.json();
+      if(!Array.isArray(manifest.dates)||!manifest.dates.length)throw new Error('No replay dates in manifest');
+      state.replayDates=manifest.dates;
+      const select=$('replay-date');select.replaceChildren();
+      for(const date of [...manifest.dates].reverse()){
+        const option=document.createElement('option');option.value=date;option.textContent=date;select.append(option);
+      }
+      await loadReplay(manifest.dates.at(-1));
+    }catch(error){status(`Replay library unavailable: ${error.message}`,'bad')}
+  }
   async function refreshLive(){
     try{
       const base=location.protocol==='file:'?'http://127.0.0.1:8765':'';
@@ -81,7 +108,7 @@
     const {amd,amdl}=current(),row=amd.at(-1),etf=amdl.findLast(r=>r.stampMs===row?.stampMs);
     $('aggregation-note').textContent=state.timeframe===1?'1-minute tape':`${state.timeframe}-minute candles · trade shares and dollars summed · OFI is the mean of available 1-minute OFI readings · midprice response sums available 1-minute moves`;
     if(state.mode==='replay'){
-      if(state.demo){status('REPLAY · October 6, 2026','warn');$('asof').textContent=state.demo.bars.AMD[state.index]?`${state.demo.bars.AMD[state.index].t} CT`:'—';$('scrub').max=Math.max(0,state.demo.bars.AMD.length-1);$('scrub').value=state.index}
+      if(state.demo){status(`REPLAY · ${state.demo.date} · ${state.demo.bars.AMD.length}/300 AMD minutes`,'warn');$('asof').textContent=state.demo.bars.AMD[state.index]?`${state.demo.bars.AMD[state.index].t} CT`:'—';$('scrub').max=Math.max(0,state.demo.bars.AMD.length-1);$('scrub').value=state.index}
     }else{
       const feed=state.live||{},age=feed.receivedAgeSeconds,lag=feed.eventLagSeconds;
       const gaps=feed.feedGapsOrOutOfOrderDrops||0;
@@ -100,6 +127,7 @@
     $('response').textContent=row?.midMoveCents==null?'—':`${signed(row.midMoveCents,1)}¢`;tone($('response'),row?.midMoveCents);
     $('amdl').textContent=signed(etf?.delta);tone($('amdl'),etf?.delta);
     $('net').textContent=compact(row?.netOutflowUsd);tone($('net'),-(row?.netOutflowUsd||0));
+    $('net-note').textContent=state.mode==='replay'&&state.demo?.available?.netOutflowUsd===false?'Unavailable in this processed session':'Seller − buyer classified dollars';
     $('freshness').textContent=state.mode==='live'?(state.live?.eventLagSeconds!=null?`Feed ${state.live.eventLagSeconds}s old · AMD bar ${row?Math.max(0,Math.round(Date.now()/1000-(row.stampMs/1000+60)))+'s old':'unavailable'}`:'No feed event yet'):'Recorded paired tape';
     renderAnalytics();
     renderFlow();
@@ -148,6 +176,10 @@
     }
   }
   $('replay').onclick=replayMode;$('live').onclick=liveMode;
+  $('replay-date').onchange=async event=>{
+    try{await loadReplay(event.target.value,true)}
+    catch(error){status(`Could not load replay: ${error.message}`,'bad')}
+  };
   for(const minutes of [1,2,5])$('candle-'+minutes).onclick=()=>{state.timeframe=minutes;for(const value of [1,2,5])$('candle-'+value).classList.toggle('active',value===minutes);render()};
   for(const minutes of [5,15])$('analytic-'+minutes).onclick=()=>{state.analyticWindow=minutes;for(const value of [5,15])$('analytic-'+value).classList.toggle('active',value===minutes);render()};
   for(const value of ['open','session'])$('flow-'+value).onclick=()=>{state.flowStart=value;for(const option of ['open','session'])$('flow-'+option).classList.toggle('active',option===value);render()};
@@ -163,7 +195,6 @@
   $('faster').onclick=()=>setSpeed(replaySpeeds[Math.max(0,replaySpeeds.indexOf(state.speed)-1)]);
   $('previous').onclick=()=>{stop();state.index=Math.max(0,state.index-1);render()};
   $('next').onclick=()=>{stop();state.index=Math.min(state.demo.bars.AMD.length-1,state.index+1);render()};
-  if(window.AMD_LIVE_DEMO){state.demo=window.AMD_LIVE_DEMO;state.index=Math.min(162,state.demo.bars.AMD.length-1);replayMode()}
-  else status('October 6 replay data unavailable','bad');
+  loadLibrary();
   setInterval(()=>{if(state.mode==='live')refreshLive()},2000);
 })();

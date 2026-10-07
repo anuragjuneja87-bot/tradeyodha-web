@@ -11,6 +11,7 @@ import argparse
 import heapq
 import json
 import os
+import re
 import statistics
 import threading
 import time
@@ -355,7 +356,7 @@ def handler(state: TapeState):
                 self.wfile.write(payload)
                 return
             name = self.path.split("?", 1)[0].lstrip("/") or "index.html"
-            if name not in {"index.html", "app.js", "analytics.js", "history-windows.js", "demo-2026-10-06.js", "demo-2026-10-06.json"}:
+            if name not in {"index.html", "app.js", "analytics.js", "history-windows.js", "replay-manifest.json"} and not re.fullmatch(r"replay/20\d{2}-\d{2}-\d{2}\.json", name):
                 self.send_error(404)
                 return
             path = PAGE / name
