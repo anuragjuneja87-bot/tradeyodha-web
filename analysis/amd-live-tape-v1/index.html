@@ -457,6 +457,17 @@ html.trader-ui-v2 #dashboard.chart-panel-hidden .chart-first-hero .chart-formati
 html.trader-ui-v2 #dashboard.chart-panel-hidden .chart-first-hero .trader-snapshot{display:none!important}
 @media(max-width:760px){html.trader-ui-v2 #dashboard{height:auto;min-height:100dvh;overflow:visible}html.trader-ui-v2 #dashboard .chart-first-hero{flex:none;grid-template-rows:auto}html.trader-ui-v2 #dashboard .chart-first-hero .replay-chart{min-height:55vh}html.trader-ui-v2 #dashboard #professional-chart{min-height:335px}html.trader-ui-v2 #dashboard .chart-first-hero .trader-snapshot{height:auto;overflow:visible}}
 @media(max-width:760px){html.trader-ui-v2 #dashboard.chart-panel-hidden{height:100dvh;overflow:hidden}html.trader-ui-v2 #dashboard.chart-panel-hidden .chart-first-hero{flex:1 1 auto;grid-template-rows:minmax(0,1fr)}html.trader-ui-v2 #dashboard.chart-panel-hidden .chart-first-hero .replay-chart{min-height:0}html.trader-ui-v2 #dashboard.chart-panel-hidden #professional-chart{min-height:0;flex:1 1 auto}}
+html.trader-ui-v2 #chart-focus-toggle{position:absolute;top:9px;right:90px;z-index:20;padding:6px 10px;border:1px solid #87b9d3;border-radius:6px;background:#102c3ee8;color:#e7f7ff;font-size:12px;font-weight:750;box-shadow:0 2px 10px #0009;cursor:pointer;touch-action:manipulation}
+html.trader-ui-v2 #chart-focus-toggle:hover,html.trader-ui-v2 #chart-focus-toggle:focus-visible{background:#1b536a;outline:2px solid #fff;outline-offset:2px}
+html.chart-focus-active body{overflow:hidden}
+html.trader-ui-v2.chart-focus-active #dashboard #replay-chart{position:fixed!important;inset:0!important;z-index:1000;width:100vw!important;height:100dvh!important;min-height:0!important;max-height:none!important;margin:0!important;padding:44px 6px 6px!important;border:0;border-radius:0;background:#000;display:flex;flex-direction:column;overflow:hidden}
+html.trader-ui-v2.chart-focus-active #dashboard #professional-chart{height:auto!important;min-height:0!important;flex:1 1 auto!important}
+html.trader-ui-v2.chart-focus-active #dashboard #replay-chart-svg{height:auto!important;min-height:0!important;flex:1 1 auto!important}
+html.trader-ui-v2.chart-focus-active #replay-chart #chart-focus-toggle{top:7px;right:12px}
+html.trader-ui-v2.chart-focus-active #replay-chart #candle-color-key,
+html.trader-ui-v2.chart-focus-active #replay-chart #professional-level-details,
+html.trader-ui-v2.chart-focus-active #replay-chart #chart-time-jumps,
+html.trader-ui-v2.chart-focus-active #replay-chart #replay-evidence-legend{display:none!important}
 
 /* UI-3 remains inside the opt-in professional workspace. */
 html.trader-ui-v2 #ui3-pressure{margin:0 0 5px;min-width:0}
