@@ -319,7 +319,9 @@
     const zoneFeedback=document.createElement('span');zoneFeedback.id='zone-feedback';
     zoneFeedback.className='zone-feedback';zoneFeedback.setAttribute('role','status');zoneFeedback.hidden=true;
     document.addEventListener('keydown',event=>{
-      if(event.key==='Escape'&&state.zone){clearZone.click();event.preventDefault()}
+      if(event.key==='Escape'&&state.zone&&!document.documentElement.classList.contains('chart-focus-active')){
+        clearZone.click();event.preventDefault()
+      }
     });
     if(window.TRADER_UI_V2)timeframe.append(inspectorToggle);
     timeframe.append(clearZone,zoneFeedback);
@@ -395,13 +397,37 @@
     chartFocus.type='button';chartFocus.textContent='⤢ Expand chart';
     chartFocus.setAttribute('aria-label','Expand chart to fill the screen');
     chartFocus.setAttribute('aria-pressed','false');
+    const timeframeControls=$('candle-toolbar'),replayControls=$('replay-controls');
+    const timeframeHome=document.createComment('chart timeframe controls home');
+    const replayHome=document.createComment('replay controls home');
+    timeframeControls.before(timeframeHome);replayControls.before(replayHome);
+    const focusBar=document.createElement('div');focusBar.id='chart-focus-bar';focusBar.hidden=true;
+    focusBar.innerHTML='<strong id="chart-focus-symbol"></strong><div id="chart-focus-timeframe"></div><div id="chart-price-tools" role="group" aria-label="Price scale controls"><span>Price scale</span><button type="button" data-price-zoom="out" aria-label="Zoom price scale out">−</button><button type="button" data-price-zoom="in" aria-label="Zoom price scale in">+</button><button type="button" data-price-zoom="reset">Reset</button></div><div id="chart-focus-playback"></div>';
+    focusBar.querySelector('#chart-price-tools').onclick=event=>{
+      const action=event.target.closest('button[data-price-zoom]')?.dataset.priceZoom;
+      if(action==='reset')window.TY_PRO_CHART?.resetPriceZoom();
+      else if(action)window.TY_PRO_CHART?.zoomPrice(action);
+    };
+    chart.prepend(focusBar);
     const setChartFocus=enabled=>{
+      if(enabled){
+        focusBar.querySelector('#chart-focus-symbol').textContent=`${state.symbol} · ${state.mode==='replay'?'Replay':'Live'}`;
+        focusBar.querySelector('#chart-focus-timeframe').append(timeframeControls);
+        focusBar.querySelector('#chart-focus-playback').append(replayControls);
+        focusBar.hidden=false;
+      }else{
+        timeframeHome.after(timeframeControls);replayHome.after(replayControls);
+        focusBar.hidden=true;
+      }
       document.documentElement.classList.toggle('chart-focus-active',enabled);
       chartFocus.textContent=enabled?'✕ Exit chart view':'⤢ Expand chart';
       chartFocus.setAttribute('aria-label',enabled?'Exit chart-only view':'Expand chart to fill the screen');
       chartFocus.setAttribute('aria-pressed',String(enabled));
       requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
     };
+    $('go-live').addEventListener('click',()=>{
+      if(document.documentElement.classList.contains('chart-focus-active'))setChartFocus(false);
+    });
     chartFocus.onclick=()=>setChartFocus(!document.documentElement.classList.contains('chart-focus-active'));
     document.addEventListener('keydown',event=>{
       if(event.key==='Escape'&&document.documentElement.classList.contains('chart-focus-active'))setChartFocus(false);

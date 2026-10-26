@@ -363,8 +363,13 @@
     }
     return points;
   }
+  function priceScaleMargins(level){
+    const step=Math.max(-4,Math.min(6,Math.round(Number(level)||0)));
+    const margin=step>=0?.09+step*.05:.09*Math.pow(1.7,step);
+    return {top:margin,bottom:margin};
+  }
   return {candles,classifiedVolume,candleDeltaClass,histogramDelta,volumePressureTier,candleBodyAppearance,candleBodyColor,flowPrismStyle,prismVolumeReferences,qualifiedQuoteOfi,decisionSnapshot,timelineJumpRows,replayDeltaEvidence,replayWindowKey,candlesWithFallback,marketOpenBoundaryIndex,nicePriceTicks,
-    chartPriceDomain,liveViewportFocus,ema,
+    chartPriceDomain,liveViewportFocus,ema,priceScaleMargins,
     packLevelLabels,notableOiStrikes,nearbyOiStrikes,sweepActivity,buyerSellerRatio};
 });
 
@@ -514,7 +519,37 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
       containerWheel,ema9Points:[],ema21Points:[],container,key,rows:[],candlePoints:[],
       intervalMinutes:1,lines:[],levelKey:'',lastTime:0,
       marker,premarket,market,partitions,windows,boundaries,pmLabels,pmLabelNodes:new Map(),pmLevels:[],viewport:null,openStampMs:null,
-      manualViewport:false,pointerStart:null,disposed:false,selection,dragLayer,deleteZone,zone:null,zoneEnabled:false,onZone:null,onZoneDelete:null,onZoneFeedback:null,zoneCutoffMs:0,zoneIntervalMs:60_000};
+      manualViewport:false,pointerStart:null,disposed:false,selection,dragLayer,deleteZone,zone:null,zoneEnabled:false,onZone:null,onZoneDelete:null,onZoneFeedback:null,zoneCutoffMs:0,zoneIntervalMs:60_000,priceZoomLevel:0};
+    obj.setPriceZoom=level=>{
+      obj.priceZoomLevel=Math.max(-4,Math.min(6,Math.round(Number(level)||0)));
+      chart.priceScale('right').applyOptions({scaleMargins:root.TRADEYODHA_REPLAY_CHART.priceScaleMargins(obj.priceZoomLevel)});
+      requestAnimationFrame(obj.positionMarker);
+      return obj.priceZoomLevel;
+    };
+    // Touches on the price scale adjust vertical spacing; plot gestures still pan and zoom time.
+    const priceTouch=document.createElement('div');priceTouch.className='price-scale-touch';
+    priceTouch.setAttribute('aria-hidden','true');container.append(priceTouch);obj.priceTouch=priceTouch;
+    let priceGesture=null;
+    priceTouch.addEventListener('touchstart',event=>{
+      const touches=event.touches;
+      priceGesture={level:obj.priceZoomLevel,y:touches[0]?.clientY||0,
+        span:touches.length>1?Math.abs(touches[0].clientY-touches[1].clientY):null};
+      event.preventDefault();event.stopPropagation();
+    },{passive:false});
+    priceTouch.addEventListener('touchmove',event=>{
+      if(!priceGesture)return;
+      const touches=event.touches;
+      const movement=touches.length>1&&priceGesture.span!=null?
+        (priceGesture.span-Math.abs(touches[0].clientY-touches[1].clientY))/30:
+        ((touches[0]?.clientY||priceGesture.y)-priceGesture.y)/45;
+      obj.setPriceZoom(priceGesture.level+movement);
+      event.preventDefault();event.stopPropagation();
+    },{passive:false});
+    priceTouch.addEventListener('touchend',event=>{
+      priceGesture=event.touches.length?{level:obj.priceZoomLevel,
+        y:event.touches[0].clientY,span:null}:null;
+      event.preventDefault();event.stopPropagation();
+    },{passive:false});
     obj.drawPrisms=()=>{
       if(obj.disposed)return;
       const width=container.clientWidth,height=container.clientHeight;
@@ -750,6 +785,7 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
       // price scale free for its drag-to-zoom interaction.
       const priceScaleWidth=chart.priceScale('right').width();
       dragLayer.style.right=`${Math.max(72,Math.ceil(priceScaleWidth||0))}px`;
+      priceTouch.style.width=`${Math.max(72,Math.ceil(priceScaleWidth||0))}px`;
       const row=obj.rows.find(item=>ct.format(item.stampMs).startsWith('08:30'));
       const stamp=obj.openStampMs??row?.stampMs;
       const center=stamp?chart.timeScale().timeToCoordinate(Math.floor(stamp/1000)):null;
@@ -833,7 +869,7 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
       if(width>100&&obj.rows.length){
         if(obj.viewport){
           if(!obj.manualViewport)chart.timeScale().setVisibleLogicalRange(obj.viewport.range);
-        }else chart.timeScale().fitContent();
+        }else if(!obj.manualViewport)chart.timeScale().fitContent();
       }
       requestAnimationFrame(obj.positionMarker);
     });obj.resize.observe(container);
@@ -855,7 +891,7 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
     obj.chart.remove();
     for(const node of [obj.marker,obj.premarket,obj.market,obj.partitions,
       obj.pmLabels,obj.selection,obj.dragLayer,obj.deleteZone,obj.emaKey,
-      obj.prismCanvas,obj.prismToggle,obj.prismLegend])node?.remove();
+      obj.prismCanvas,obj.prismToggle,obj.prismLegend,obj.priceTouch])node?.remove();
   }
   function levels(obj,list){
     const key=JSON.stringify(list.map(item=>[item.name,item.value,item.asOfStampMs,item.source]));
@@ -939,6 +975,8 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
     }else for(const name of ['focusMs','visibleFromMs','visibleToMs'])delete container.dataset[name];
   }
   root.TY_PRO_CHART={render,recenter(){if(active)active.manualViewport=false},
+    zoomPrice(direction){return active?active.setPriceZoom(active.priceZoomLevel+(direction==='out'?1:-1)):null},
+    resetPriceZoom(){return active?active.setPriceZoom(0):null},
     jumpTo(stampMs){
       if(!active||!finite(stampMs))return false;
       const points=active.viewport?.data||active.candlePoints;
@@ -969,7 +1007,8 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
     openBoundaryX:Number.parseFloat(active.marker.style.left),
     lastUpdate:active.container.dataset.lastUpdate,
     viewport:active.viewport?{...active.viewport.range,focusMs:+active.container.dataset.focusMs}:null,
-    manualViewport:active.manualViewport,
+    manualViewport:active.manualViewport,priceZoomLevel:active.priceZoomLevel,
+    priceScaleMargins:root.TRADEYODHA_REPLAY_CHART.priceScaleMargins(active.priceZoomLevel),
     visibleRange:active.chart.timeScale().getVisibleLogicalRange()}:null},
     dispose(){if(active){remove(active);
       for(const name of ['lastUpdate','candles','lastCandle','replay','focusMs','visibleFromMs','visibleToMs'])

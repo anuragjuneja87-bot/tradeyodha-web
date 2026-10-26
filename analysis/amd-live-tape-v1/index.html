@@ -460,7 +460,29 @@ html.trader-ui-v2 #dashboard.chart-panel-hidden .chart-first-hero .trader-snapsh
 html.trader-ui-v2 #chart-focus-toggle{position:absolute;top:9px;right:90px;z-index:20;padding:6px 10px;border:1px solid #87b9d3;border-radius:6px;background:#102c3ee8;color:#e7f7ff;font-size:12px;font-weight:750;box-shadow:0 2px 10px #0009;cursor:pointer;touch-action:manipulation}
 html.trader-ui-v2 #chart-focus-toggle:hover,html.trader-ui-v2 #chart-focus-toggle:focus-visible{background:#1b536a;outline:2px solid #fff;outline-offset:2px}
 html.chart-focus-active body{overflow:hidden}
-html.trader-ui-v2.chart-focus-active #dashboard #replay-chart{position:fixed!important;inset:0!important;z-index:1000;width:100vw!important;height:100dvh!important;min-height:0!important;max-height:none!important;margin:0!important;padding:44px 6px 6px!important;border:0;border-radius:0;background:#000;display:flex;flex-direction:column;overflow:hidden}
+html.trader-ui-v2 #professional-chart .price-scale-touch{display:none;position:absolute;top:0;right:0;bottom:29px;width:78px;z-index:11;touch-action:none;background:transparent}
+html.trader-ui-v2.chart-focus-active #professional-chart .price-scale-touch{display:block}
+html.trader-ui-v2.chart-focus-active #dashboard #replay-chart{position:fixed!important;inset:0!important;z-index:1000;width:100vw!important;height:100dvh!important;min-height:0!important;max-height:none!important;margin:0!important;padding:6px!important;border:0;border-radius:0;background:#000;display:flex;flex-direction:column;overflow:hidden}
+html.trader-ui-v2 #chart-focus-bar[hidden]{display:none!important}
+html.trader-ui-v2.chart-focus-active #chart-focus-bar{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:5px 9px;flex:none;min-width:0;padding:0 138px 6px 5px;color:#e8f4fc}
+html.trader-ui-v2 #chart-focus-symbol{font-size:12px;white-space:nowrap}
+html.trader-ui-v2 #chart-focus-timeframe{min-width:0}
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar{display:flex;align-items:center;justify-content:flex-start;gap:4px;flex-wrap:wrap;min-height:0;margin:0;padding:0;border:0;background:none}
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar>strong{font-size:11px;color:#a9c2d1}
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar button{padding:4px 7px;font-size:11px;white-space:nowrap}
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar #zone-inspect-toggle,
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar #zone-clear,
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar .flow-prism-toggle,
+html.trader-ui-v2 #chart-focus-timeframe #candle-toolbar #zone-feedback{display:none!important}
+html.trader-ui-v2 #chart-price-tools{display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px;color:#aac2d2}
+html.trader-ui-v2 #chart-price-tools button{min-width:31px;padding:4px 6px;font-size:12px}
+html.trader-ui-v2 #chart-focus-playback{grid-column:1/-1;min-width:0}
+html.trader-ui-v2 #chart-focus-playback:has(#replay-controls[hidden]){display:none}
+html.trader-ui-v2 #chart-focus-playback #replay-controls{display:flex;flex-wrap:wrap;width:100%;min-width:0;min-height:0;margin:0;padding:2px 0;border:0;background:none}
+html.trader-ui-v2 #chart-focus-playback #replay-controls .replay-timeline{order:2;min-width:0;flex:1 1 100%;width:100%}
+html.trader-ui-v2 #chart-focus-playback #replay-controls #asof,
+html.trader-ui-v2 #chart-focus-playback #replay-controls #go-live{order:1}
+@media(max-width:700px){html.trader-ui-v2.chart-focus-active #chart-focus-bar{grid-template-columns:1fr auto;padding-right:0;padding-top:38px}html.trader-ui-v2 #chart-focus-symbol{grid-column:1}html.trader-ui-v2 #chart-focus-timeframe{grid-column:1/-1}html.trader-ui-v2 #chart-price-tools{grid-column:2;grid-row:1}}
 html.trader-ui-v2.chart-focus-active #dashboard #professional-chart{height:auto!important;min-height:0!important;flex:1 1 auto!important}
 html.trader-ui-v2.chart-focus-active #dashboard #replay-chart-svg{height:auto!important;min-height:0!important;flex:1 1 auto!important}
 html.trader-ui-v2.chart-focus-active #replay-chart #chart-focus-toggle{top:7px;right:12px}

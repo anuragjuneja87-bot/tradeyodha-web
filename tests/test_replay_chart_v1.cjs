@@ -6,6 +6,10 @@ const context={window:{}};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,
   '../analysis/amd-live-tape-v1/replay-chart.js'),'utf8'),context);
 const chart=context.window.TRADEYODHA_REPLAY_CHART;
+assert.deepEqual({...chart.priceScaleMargins(0)},{top:.09,bottom:.09});
+assert.ok(chart.priceScaleMargins(2).top>chart.priceScaleMargins(0).top);
+assert.ok(chart.priceScaleMargins(-2).top<chart.priceScaleMargins(0).top);
+assert.ok(chart.priceScaleMargins(100).top<.5);
 const start=Date.UTC(2026,9,15,13,30);
 const row=(offset,o,h,l,c)=>({stampMs:start+offset*30_000,o,h,l,c});
 const tape=[
