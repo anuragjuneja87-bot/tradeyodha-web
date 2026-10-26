@@ -24,10 +24,20 @@ def main() -> None:
     PLIST.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "Label": LABEL,
-        "ProgramArguments": [str(python), str(ROOT / "scripts/serve-amd-live-tape-v1.py")],
+        # Hold an idle-sleep assertion only while the collector is running.
+        # A closed lid or powered-off Mac can still sleep; REST refill repairs
+        # those missed candles when the service resumes.
+        "ProgramArguments": ["/usr/bin/caffeinate", "-i", str(python), str(ROOT / "scripts/serve-amd-live-tape-v1.py"),
+                             "--symbols", "AMD,TSLA,SPY,SMH,QQQ,META,NVDA,MU,MSFT,SOXL,SPCX,SNDK"],
         "WorkingDirectory": str(ROOT),
+        # A login after 03:00 must start the collector even when the 03:00
+        # calendar event occurred while the Mac was powered off.
         "RunAtLoad": True,
-        "KeepAlive": True,
+        # Retry a crashed collector, while its normal exit at exchange close
+        # stays stopped until the next scheduled trading-day start.
+        "KeepAlive": {"SuccessfulExit": False},
+        "StartCalendarInterval": [
+            {"Weekday": weekday, "Hour": 3, "Minute": 0} for weekday in range(1, 6)],
         "ThrottleInterval": 10,
         "StandardOutPath": str(LOG_DIR / "launchd.out.log"),
         "StandardErrorPath": str(LOG_DIR / "launchd.err.log"),
@@ -36,8 +46,9 @@ def main() -> None:
     domain = f"gui/{os.getuid()}"
     subprocess.run(["launchctl", "bootout", domain, str(PLIST)], capture_output=True)
     subprocess.run(["launchctl", "bootstrap", domain, str(PLIST)], check=True)
-    subprocess.run(["launchctl", "kickstart", "-k", f"{domain}/{LABEL}"], check=True)
-    print(f"Installed {LABEL}; local page: http://127.0.0.1:8765/")
+    # RunAtLoad starts the service during bootstrap when the session is open;
+    # main() itself exits cleanly outside the market window.
+    print(f"Installed {LABEL}; 03:00 CT trading-day start, automatic exchange-close stop")
 
 
 if __name__ == "__main__":

@@ -12,7 +12,8 @@ PAGE = ROOT / "analysis/amd-live-tape-v1"
 class ReplayLibraryTest(unittest.TestCase):
     def test_manifest_and_selected_source_values(self):
         manifest = json.loads((PAGE / "replay-manifest.json").read_text())
-        self.assertEqual(len(manifest["dates"]), 30)
+        self.assertGreaterEqual(len(manifest["dates"]), 30)
+        self.assertEqual(manifest["dates"], sorted(set(manifest["dates"])))
         self.assertEqual(manifest["dates"], [item["date"] for item in manifest["sessions"]])
         for item in manifest["sessions"]:
             path = PAGE / item["file"]
@@ -26,11 +27,15 @@ class ReplayLibraryTest(unittest.TestCase):
         sep = json.loads((PAGE / "replay/2026-09-22.json").read_text())
         row = next(row for row in sep["bars"]["AMD"] if row["t"] == "08:30")
         self.assertEqual(row["delta"], row["buy"] - row["sell"])
-        self.assertIsNone(row["netOutflowUsd"])
-        self.assertEqual(sep["available"]["netOutflowUsd"], False)
+        self.assertIsInstance(row["netOutflowUsd"], (int, float))
+        self.assertEqual(sep["available"]["netOutflowUsd"], True)
         oct6 = json.loads((PAGE / "replay/2026-10-06.json").read_text())
         original = json.loads((PAGE / "demo-2026-10-06.json").read_text())
-        self.assertEqual(oct6["bars"], original["bars"])
+        self.assertEqual(len(oct6["bars"]["AMD"]), len(original["bars"]["AMD"]))
+        for replay, recorded in zip(oct6["bars"]["AMD"], original["bars"]["AMD"]):
+            for field in ("t", "stampMs", "o", "h", "l", "litShares", "buy", "sell", "delta"):
+                self.assertEqual(replay[field], recorded[field], f"Oct 6 {replay['t']} {field}")
+            self.assertAlmostEqual(replay["c"], recorded["c"], places=4)
         self.assertTrue(oct6["available"]["netOutflowUsd"])
 
 

@@ -38,3 +38,13 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+/tmp/amd-live-tape-v1/
+/analysis/watchlist-flow-history-v1/raw/
+/analysis/watchlist-flow-history-v1/raw-full/
+
+# Python agent harness
+/.venv/
+/.pytest_cache/
+__pycache__/
+*.py[cod]
+/.agent-state/
