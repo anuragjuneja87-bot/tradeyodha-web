@@ -248,6 +248,7 @@
   const $ = id => document.getElementById(id);
   const replaySpeeds = [1000, 2000, 5000, 10000, 15000, 30000, 60000];
   const state = {mode:'choose', demo:null, live:null, half:null, micro:null, microManifest:null,
+    sweeps:null,sweepManifest:null,
     index:0, halfIndex:0, chartFocusMs:null, detailsHidden:false,
     timer:null, speed:1000, timeframe:5, selectedStamp:null, replayDates:[], premarketLevels:null,
     premarketGap:null, replayLoadError:null,
@@ -392,10 +393,10 @@
       </div><p class="flow-definitions-note">Both OFI variants use best-quote changes, not executed buying or full book depth.</p>`;
     const chart=document.createElement('section');chart.id='replay-chart';chart.className='replay-chart';
     chart.hidden=true;chart.setAttribute('aria-label','Session candlestick chart');
-      chart.innerHTML='<div class="replay-chart-head"><strong id="replay-chart-title">Session candles</strong><span id="replay-chart-hover" aria-live="off">Hover a candle for details</span><button id="chart-panel-toggle" type="button" hidden aria-expanded="true">Hide panel</button><span id="replay-chart-oi-status" class="chart-oi-status" hidden></span><span id="replay-chart-asof">—</span></div><svg id="replay-chart-svg" role="img" aria-label="Session candlesticks through available tape" viewBox="0 0 1100 420" preserveAspectRatio="none"></svg><div id="chart-candle-readout" class="chart-candle-readout" role="tooltip" aria-label="Hovered candle price, buyer, seller, delta, flow quality, classified coverage, and quote OFI" hidden><strong id="chart-readout-time">Candle</strong><span class="readout-group" title="Lit initiating side is estimated by quote matching; delta is buyer minus seller classified shares."><span class="readout-label">Candle lit volume</span><span class="readout-values"><b id="chart-volume-buy" class="positive">Buyer —</b><b id="chart-volume-sell" class="negative">Seller —</b><b id="chart-volume-lit">Lit shares —</b><b id="chart-volume-coverage">Classified —</b><b id="chart-volume-delta">Delta —</b></span></span><span id="chart-flow-evidence" class="readout-label">Flow color —</span><span id="chart-ofi-readout" class="readout-label">Quote OFI —</span></div>';
+      chart.innerHTML='<div class="replay-chart-head"><strong id="replay-chart-title">Session candles</strong><span id="replay-chart-hover" aria-live="off">Hover a candle for details</span><button id="chart-panel-toggle" type="button" hidden aria-expanded="true">Hide panel</button><span id="replay-chart-oi-status" class="chart-oi-status" hidden></span><span id="replay-chart-asof">—</span></div><svg id="replay-chart-svg" role="img" aria-label="Session candlesticks through available tape" viewBox="0 0 1100 420" preserveAspectRatio="none"></svg><div id="chart-candle-readout" class="chart-candle-readout" role="tooltip" aria-label="Hovered candle price, buyer, seller, delta, classified coverage, sweep candidates, and quote OFI" hidden><strong id="chart-readout-time">Candle</strong><span class="readout-group" title="Lit initiating side is estimated by quote matching; delta is buyer minus seller classified shares."><span class="readout-label">Candle lit volume</span><span class="readout-values"><b id="chart-volume-buy" class="positive">Buyer —</b><b id="chart-volume-sell" class="negative">Seller —</b><b id="chart-volume-lit">Lit shares —</b><b id="chart-volume-coverage">Classified —</b><b id="chart-volume-delta">Delta —</b></span></span><span id="chart-ofi-readout" class="readout-label">Quote OFI —</span></div>';
     const sweepLine=document.createElement('span');sweepLine.id='chart-sweep-evidence';
     sweepLine.className='readout-label';
-    chart.querySelector('#chart-flow-evidence').after(sweepLine);
+    chart.querySelector('.readout-group').after(sweepLine);
     const chartFocus=document.createElement('button');chartFocus.id='chart-focus-toggle';
     chartFocus.type='button';chartFocus.textContent='⤢ Expand chart';
     chartFocus.setAttribute('aria-label','Expand chart to fill the screen');
@@ -745,7 +746,7 @@
     cancelZoneRequest();state.zone=null;state.zoneResult=null;renderZoneInspector();
     state.symbol=symbol;saveWatchlist();
     closeLiveUpdates();
-    state.live=null;state.half=null;state.demo=null;state.micro=null;
+    state.live=null;state.half=null;state.demo=null;state.micro=null;state.sweeps=null;
     state.earlyReplay=null;state.replayTimeline=null;
     state.liveTick=null;state.liveTickVersion=null;state.liveTickRunId=null;
     state.symbolReplayPayload=null;state.selectedStamp=null;state.premarketLevels=null;
@@ -1210,21 +1211,26 @@
     const delta=hasVolume?row.buy-row.sell:null;
     $('chart-volume-delta').textContent=hasVolume?`Delta ${delta>=0?'+':'−'}${number(Math.abs(delta))}`:'Delta N/A';
     $('chart-volume-delta').className=hasVolume?(delta>0?'positive':delta<0?'negative':''):'';
-    $('chart-flow-evidence').textContent=row?
-      window.TRADEYODHA_REPLAY_CHART.candleBodyAppearance(row,state.timeframe).label:
-      'Flow color unavailable';
     const sweepLine=$('chart-sweep-evidence');
     const cursor=replayCursor();
     const sweepAsOf=cursor?.stampMs+(state.timeframe===.5?30_000:60_000);
-    const sweep=row?.complete&&!row.priceOnly&&state.mode==='replay'&&
-      state.symbol==='AMD'&&state.micro?.date===state.demo?.date?
+    const sweepRows=state.sweeps&&state.demo&&state.sweeps.symbol===state.symbol&&
+      state.sweeps.date===state.demo.date?
+      state.sweeps.bars:state.symbol==='AMD'&&state.micro&&state.demo&&
+      state.micro.date===state.demo.date?
+        state.micro.bars:null;
+    const sweepQualified=row?.complete&&!row.priceOnly&&row.deltaConstituentsValid!==false&&
+      Number.isFinite(row.litShares)&&row.litShares>0&&
+      Number.isFinite(row.buy)&&Number.isFinite(row.sell)&&
+      (row.buy+row.sell)/row.litShares>=.65;
+    const sweep=sweepQualified&&state.mode==='replay'&&sweepRows?
       window.TRADEYODHA_REPLAY_CHART.sweepCandidatesForCandle(
-        state.micro.bars,row.stampMs,state.timeframe*60_000,sweepAsOf):null;
+        sweepRows,row.stampMs,state.timeframe*60_000,sweepAsOf):null;
     sweepLine.textContent=sweep?
       `Sweep candidates · Sell ${sweep.sell} / Buy ${sweep.buy}`:
       !row?.complete?'Sweep candidates · awaiting close':
-      state.mode==='live'?'Sweep candidates · unavailable live':
-      'Sweep candidates · research unavailable';
+      state.mode==='live'?'Sweep candidates · replay only':
+      'Sweep candidates · no verified tape for this candle';
     sweepLine.setAttribute('aria-label',sweep?
       `Estimated sweep candidates of at least 1,000 shares: ${sweep.sell} sell groups totaling ${number(sweep.sellShares)} shares; ${sweep.buy} buy groups totaling ${number(sweep.buyShares)} shares. These are not confirmed parent orders.`:
       sweepLine.textContent);
@@ -2179,7 +2185,7 @@
   function liveMode(){
     replayLoadVersion++;
     cancelZoneRequest();state.zone=null;state.zoneResult=null;renderZoneInspector();
-    state.demo=null;state.symbolReplayPayload=null;state.micro=null;
+    state.demo=null;state.symbolReplayPayload=null;state.micro=null;state.sweeps=null;
     state.live=null;state.half=null;state.liveTick=null;state.liveTickVersion=null;
     state.liveTickRunId=null;
     state.replayQuality=null;state.replayQualityStatus='unavailable';
@@ -2261,7 +2267,7 @@
     for(const id of ['pm-levels','pin-levels','walls-levels','long-levels'])
       $(id).textContent='Loading verified sources…';
     // Never leave the previous symbol/date visible while a new replay is in flight.
-    state.demo=null;state.half=null;state.micro=null;state.earlyReplay=null;
+    state.demo=null;state.half=null;state.micro=null;state.sweeps=null;state.earlyReplay=null;
     state.replayTimeline=null;state.symbolReplayPayload=null;state.selectedStamp=null;
     state.premarketLevels=null;state.premarketGap=null;state.chartOptions=null;
     state.replayQuality=null;state.replayQualityStatus='loading';
@@ -2285,12 +2291,14 @@
       state.symbolReplayPayload=payload;
     }else state.symbolReplayPayload=null;
     const micro=symbol==='AMD'?await loadReplayMicro(date):null;
+    const sweeps=await loadReplaySweeps(symbol,date).catch(()=>null);
     const early=await loadEarlyPrice(symbol,date);
     if(requestVersion!==replayLoadVersion||state.symbol!==symbol)return;
     state.demo=liveToday?{date,mode:'replay',todayReplay:true,bars:{[symbol]:rows},source:payload.source}:
       symbol==='AMD'&&!fullArchive?payload:
       {date,mode:'replay',bars:{[symbol]:rows},source:payload.source};
     state.micro=micro;
+    state.sweeps=sweeps;
     state.earlyReplay=early;
     state.replayTimeline=[...(early?.bars||[]),...rows];
     state.half=Array.isArray(state.symbolReplayPayload?.bars?.['30s'])?
@@ -2354,17 +2362,34 @@
     const response=await fetch(`microstructure/${date}.json`,
       {cache:'no-store',signal:AbortSignal.timeout(15000)});
     if(!response.ok)throw new Error(`Validated order-flow HTTP ${response.status}`);
-    const bytes=await response.arrayBuffer();
-    if(!globalThis.crypto?.subtle)throw new Error('Secure browser context required to verify order-flow checksums');
-    const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)))
-      .map(byte=>byte.toString(16).padStart(2,'0')).join('');
-    if(digest!==entry.sha256)throw new Error(`Order-flow checksum mismatch for ${date}`);
-    const payload=JSON.parse(new TextDecoder().decode(bytes));
+    // The same-origin local server verifies the manifest SHA-256 before
+    // serving this file. LAN HTTP browsers (including iPad) have no SubtleCrypto.
+    const payload=await response.json();
     if(payload.date!==date||!Array.isArray(payload.bars)||payload.bars.length!==entry.buckets||
       payload.sourceTrades!==entry.sourceTrades||payload.sourceQuotes!==entry.sourceQuotes||
       payload.classifiedTrades!==entry.classifiedTrades||entry.minuteParityChecks<200||
       payload.bars.some((row,i)=>row.stampMs%30000||i>0&&row.stampMs<=payload.bars[i-1].stampMs))
       throw new Error(`Order-flow row validation failed for ${date}`);
+    return payload;
+  }
+  async function loadReplaySweeps(symbol,date){
+    const entry=state.sweepManifest?.sessions?.find(item=>item.symbol===symbol&&item.date===date);
+    if(!entry)return null;
+    const response=await fetch(`replay-sweeps/${symbol}/${date}.json`,
+      {cache:'no-store',signal:AbortSignal.timeout(15000)});
+    if(!response.ok)throw new Error(`Verified sweep cache HTTP ${response.status}`);
+    const payload=await response.json();
+    const source=state.symbolHistory[symbol]?.sessions?.find(item=>item.date===date)?.sourceSha256;
+    if(payload.symbol!==symbol||payload.date!==date||
+      !['trades','quotes'].every(kind=>payload.sourceSha256?.[kind]&&
+        payload.sourceSha256[kind]===source?.[kind]&&entry.sourceSha256?.[kind]===source[kind])||
+      payload.parityChecks!==entry.parityChecks||payload.bars?.length!==entry.buckets||
+      !Array.isArray(payload.bars)||payload.bars.some((bar,index)=>
+        !Number.isSafeInteger(bar.stampMs)||bar.stampMs%30_000||
+        index>0&&bar.stampMs<=payload.bars[index-1].stampMs||
+        !['sellSweepCandidates','buySweepCandidates','sellSweepShares','buySweepShares']
+          .every(key=>Number.isSafeInteger(bar[key])&&bar[key]>=0)))
+      throw new Error(`Sweep source provenance mismatch for ${symbol} ${date}`);
     return payload;
   }
   async function loadLibrary(){
@@ -2379,6 +2404,11 @@
           {cache:'no-store',signal:AbortSignal.timeout(15000)});
         if(microResponse.ok)state.microManifest=await microResponse.json();
       }catch(_error){state.microManifest=null}
+      try{
+        const sweepResponse=await fetch('replay-sweeps-manifest.json',
+          {cache:'no-store',signal:AbortSignal.timeout(15000)});
+        if(sweepResponse.ok)state.sweepManifest=await sweepResponse.json();
+      }catch(_error){state.sweepManifest=null}
       if(state.symbol==='AMD')setReplayDates([...new Set([
         ...manifest.dates,...(state.symbolHistory.AMD?.dates||[])])].sort());
       if(state.mode==='replay'&&!state.demo)await loadReplay(manifest.dates.at(-1));

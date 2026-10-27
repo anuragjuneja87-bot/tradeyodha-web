@@ -2612,6 +2612,46 @@ def handler(state: TapeState, raw_dir: Path, live_upstream: str | None = None):
                 self.wfile.write(payload)
                 return
             name = self.path.split("?", 1)[0].lstrip("/") or "index.html"
+            sweep_root = ROOT / "tmp/amd-live-tape-v1/replay-sweeps-v1"
+            sweep_match = re.fullmatch(
+                r"replay-sweeps/(AMD|TSLA|SPY|QQQ|META|NVDA|MU|MSFT|SOXL|SPCX|SNDK)/(20\d{2}-\d{2}-\d{2})\.json", name)
+            if name == "replay-sweeps-manifest.json" or sweep_match:
+                manifest_path = sweep_root / "manifest.json"
+                if not manifest_path.is_file():
+                    self.send_error(404)
+                    return
+                if sweep_match:
+                    symbol, day = sweep_match.groups()
+                    manifest = json.loads(manifest_path.read_text())
+                    entry = next((item for item in manifest.get("sessions", [])
+                                  if item.get("symbol") == symbol and item.get("date") == day), None)
+                    if entry is None or entry.get("file") != f"{symbol}/{day}.json":
+                        self.send_error(404)
+                        return
+                    history_path = PAGE / "watchlist-history" / f"{symbol}.json"
+                    history = json.loads(history_path.read_text()) if history_path.is_file() else {}
+                    source_entry = next((item for item in history.get("sessions", [])
+                                         if item.get("date") == day), None)
+                    if source_entry is None or entry.get("sourceSha256") != source_entry.get("sourceSha256"):
+                        self.send_error(503, "Sweep source provenance mismatch")
+                        return
+                    path = sweep_root / entry["file"]
+                    if not path.is_file():
+                        self.send_error(404)
+                        return
+                    payload = path.read_bytes()
+                    if hashlib.sha256(payload).hexdigest() != entry.get("sha256"):
+                        self.send_error(503, "Sweep cache checksum mismatch")
+                        return
+                else:
+                    payload = manifest_path.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
             watchlist_replay = re.fullmatch(r"watchlist-replay/(AMD|TSLA|SPY|SMH|QQQ|META|NVDA|MU|MSFT|SOXL|SPCX|SNDK)/(20\d{2}-\d{2}-\d{2})\.json", name)
             early_replay = re.fullmatch(r"watchlist-early/(AMD|TSLA|SPY|SMH|QQQ|META|NVDA|MU|MSFT|SOXL|SPCX|SNDK)/(20\d{2}-\d{2}-\d{2})\.json", name)
             if name not in {"index.html", "app.js", "analytics.js", "tape-intelligence.js", "zone-tape.js", "shadow-cv2-adapter.js", "replay-chart.js", "history-windows.js",
@@ -2653,6 +2693,16 @@ def handler(state: TapeState, raw_dir: Path, live_upstream: str | None = None):
                 self.send_error(404)
                 return
             payload = path.read_bytes()
+            micro_match = re.fullmatch(r"microstructure/(20\d{2}-\d{2}-\d{2})\.json", name)
+            if micro_match:
+                manifest_path = PAGE / "microstructure-manifest.json"
+                manifest = json.loads(manifest_path.read_text()) if manifest_path.is_file() else {}
+                micro_entry = next((item for item in manifest.get("sessions", [])
+                                    if item.get("date") == micro_match.group(1) and
+                                    item.get("file") == name), None)
+                if micro_entry is None or hashlib.sha256(payload).hexdigest() != micro_entry.get("sha256"):
+                    self.send_error(503, "Published microstructure checksum mismatch")
+                    return
             if (watchlist_replay or early_replay) and hashlib.sha256(payload).hexdigest() != entry.get("sha256"):
                 self.send_error(503, "Published replay checksum mismatch")
                 return
