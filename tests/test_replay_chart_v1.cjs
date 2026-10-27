@@ -220,6 +220,25 @@ assert.equal(sweepReadout[10].elevated,true);
 assert.equal(sweepReadout[10].buySweepShares,3500);
 assert.equal(chart.sweepActivity([...quietSweeps,{...sweepJump,complete:false}])[10],null);
 assert.equal(chart.sweepActivity([...quietSweeps,{...sweepJump,litShares:120}])[10].elevated,false);
+const sweepBuckets=[
+  {stampMs:0,sellSweepCandidates:2,buySweepCandidates:0,sellSweepShares:2400,buySweepShares:0},
+  {stampMs:30_000,sellSweepCandidates:0,buySweepCandidates:1,sellSweepShares:0,buySweepShares:1300},
+  {stampMs:60_000,sellSweepCandidates:0,buySweepCandidates:0,sellSweepShares:0,buySweepShares:0}];
+assert.deepEqual({...chart.sweepCandidatesForCandle(sweepBuckets,0,60_000,60_000)},
+  {sell:2,buy:1,sellShares:2400,buyShares:1300});
+assert.deepEqual({...chart.sweepCandidatesForCandle(sweepBuckets,60_000,30_000,90_000)},
+  {sell:0,buy:0,sellShares:0,buyShares:0});
+const fiveMinuteSweeps=Array.from({length:10},(_,i)=>({
+  stampMs:i*30_000,sellSweepCandidates:i===7?2:0,buySweepCandidates:i===2?1:0,
+  sellSweepShares:i===7?2600:0,buySweepShares:i===2?1400:0}));
+assert.deepEqual({...chart.sweepCandidatesForCandle(fiveMinuteSweeps,0,300_000,300_000)},
+  {sell:2,buy:1,sellShares:2600,buyShares:1400});
+assert.equal(chart.sweepCandidatesForCandle(fiveMinuteSweeps,0,300_000,299_999),null);
+assert.equal(chart.sweepCandidatesForCandle(sweepBuckets,0,60_000,59_999),null);
+assert.equal(chart.sweepCandidatesForCandle(sweepBuckets,0,120_000,120_000),null);
+assert.equal(chart.sweepCandidatesForCandle([sweepBuckets[0],sweepBuckets[0]],0,60_000,60_000),null);
+assert.equal(chart.sweepCandidatesForCandle([
+  {...sweepBuckets[0],sellSweepCandidates:null},sweepBuckets[1]],0,60_000,60_000),null);
 assert.equal(chart.buyerSellerRatio(29749,7103),'4.2:1');
 assert.equal(chart.buyerSellerRatio(3,0),'B only');
 assert.equal(chart.buyerSellerRatio(0,4),'S only');

@@ -333,6 +333,29 @@
         sweepMedian,volumeMedian,priorCount:prior.length};
     });
   }
+  function sweepCandidatesForCandle(rows,startMs,durationMs,asOfMs){
+    if(!Array.isArray(rows)||!Number.isInteger(startMs)||
+       ![30_000,60_000,120_000,300_000,900_000].includes(durationMs)||
+       !Number.isFinite(asOfMs)||startMs+durationMs>asOfMs)return null;
+    const buckets=new Map();
+    for(const row of rows){
+      const stamp=row?.stampMs;
+      if(!Number.isInteger(stamp)||stamp<startMs||stamp>=startMs+durationMs)continue;
+      if(stamp%30_000||buckets.has(stamp)||
+         !['sellSweepCandidates','buySweepCandidates','sellSweepShares','buySweepShares']
+           .every(key=>Number.isSafeInteger(row[key])&&row[key]>=0))return null;
+      buckets.set(stamp,row);
+    }
+    if(buckets.size!==durationMs/30_000)return null;
+    const totals={sell:0,buy:0,sellShares:0,buyShares:0};
+    for(let stamp=startMs;stamp<startMs+durationMs;stamp+=30_000){
+      const row=buckets.get(stamp);
+      if(!row)return null;
+      totals.sell+=row.sellSweepCandidates;totals.buy+=row.buySweepCandidates;
+      totals.sellShares+=row.sellSweepShares;totals.buyShares+=row.buySweepShares;
+    }
+    return totals;
+  }
   function buyerSellerRatio(buy,sell){
     if(!Number.isFinite(buy)||!Number.isFinite(sell)||buy<0||sell<0)return 'N/A';
     if(!buy&&!sell)return '—';
@@ -370,7 +393,7 @@
   }
   return {candles,classifiedVolume,candleDeltaClass,histogramDelta,volumePressureTier,candleBodyAppearance,candleBodyColor,flowPrismStyle,prismVolumeReferences,qualifiedQuoteOfi,decisionSnapshot,timelineJumpRows,replayDeltaEvidence,replayWindowKey,candlesWithFallback,marketOpenBoundaryIndex,nicePriceTicks,
     chartPriceDomain,liveViewportFocus,ema,priceScaleMargins,
-    packLevelLabels,notableOiStrikes,nearbyOiStrikes,sweepActivity,buyerSellerRatio};
+    packLevelLabels,notableOiStrikes,nearbyOiStrikes,sweepActivity,sweepCandidatesForCandle,buyerSellerRatio};
 });
 
 /* TradingView Lightweight Charts 5.2.1; Apache-2.0. */

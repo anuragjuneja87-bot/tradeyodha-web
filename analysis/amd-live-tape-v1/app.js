@@ -393,6 +393,9 @@
     const chart=document.createElement('section');chart.id='replay-chart';chart.className='replay-chart';
     chart.hidden=true;chart.setAttribute('aria-label','Session candlestick chart');
       chart.innerHTML='<div class="replay-chart-head"><strong id="replay-chart-title">Session candles</strong><span id="replay-chart-hover" aria-live="off">Hover a candle for details</span><button id="chart-panel-toggle" type="button" hidden aria-expanded="true">Hide panel</button><span id="replay-chart-oi-status" class="chart-oi-status" hidden></span><span id="replay-chart-asof">—</span></div><svg id="replay-chart-svg" role="img" aria-label="Session candlesticks through available tape" viewBox="0 0 1100 420" preserveAspectRatio="none"></svg><div id="chart-candle-readout" class="chart-candle-readout" role="tooltip" aria-label="Hovered candle price, buyer, seller, delta, flow quality, classified coverage, and quote OFI" hidden><strong id="chart-readout-time">Candle</strong><span class="readout-group" title="Lit initiating side is estimated by quote matching; delta is buyer minus seller classified shares."><span class="readout-label">Candle lit volume</span><span class="readout-values"><b id="chart-volume-buy" class="positive">Buyer —</b><b id="chart-volume-sell" class="negative">Seller —</b><b id="chart-volume-lit">Lit shares —</b><b id="chart-volume-coverage">Classified —</b><b id="chart-volume-delta">Delta —</b></span></span><span id="chart-flow-evidence" class="readout-label">Flow color —</span><span id="chart-ofi-readout" class="readout-label">Quote OFI —</span></div>';
+    const sweepLine=document.createElement('span');sweepLine.id='chart-sweep-evidence';
+    sweepLine.className='readout-label';
+    chart.querySelector('#chart-flow-evidence').after(sweepLine);
     const chartFocus=document.createElement('button');chartFocus.id='chart-focus-toggle';
     chartFocus.type='button';chartFocus.textContent='⤢ Expand chart';
     chartFocus.setAttribute('aria-label','Expand chart to fill the screen');
@@ -1210,6 +1213,21 @@
     $('chart-flow-evidence').textContent=row?
       window.TRADEYODHA_REPLAY_CHART.candleBodyAppearance(row,state.timeframe).label:
       'Flow color unavailable';
+    const sweepLine=$('chart-sweep-evidence');
+    const cursor=replayCursor();
+    const sweepAsOf=cursor?.stampMs+(state.timeframe===.5?30_000:60_000);
+    const sweep=row?.complete&&!row.priceOnly&&state.mode==='replay'&&
+      state.symbol==='AMD'&&state.micro?.date===state.demo?.date?
+      window.TRADEYODHA_REPLAY_CHART.sweepCandidatesForCandle(
+        state.micro.bars,row.stampMs,state.timeframe*60_000,sweepAsOf):null;
+    sweepLine.textContent=sweep?
+      `Sweep candidates · Sell ${sweep.sell} / Buy ${sweep.buy}`:
+      !row?.complete?'Sweep candidates · awaiting close':
+      state.mode==='live'?'Sweep candidates · unavailable live':
+      'Sweep candidates · research unavailable';
+    sweepLine.setAttribute('aria-label',sweep?
+      `Estimated sweep candidates of at least 1,000 shares: ${sweep.sell} sell groups totaling ${number(sweep.sellShares)} shares; ${sweep.buy} buy groups totaling ${number(sweep.buyShares)} shares. These are not confirmed parent orders.`:
+      sweepLine.textContent);
     const ofiValid=row?.complete&&!row.priceOnly&&Number.isFinite(row.ofi)&&Math.abs(row.ofi)<=1&&
       Number.isFinite(row.quoteUpdates)&&row.quoteUpdates>=3&&
       Number.isFinite(row.quoteAgeMs)&&row.quoteAgeMs>=0&&row.quoteAgeMs<=2000&&
