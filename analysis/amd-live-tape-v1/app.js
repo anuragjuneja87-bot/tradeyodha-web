@@ -392,7 +392,7 @@
       </div><p class="flow-definitions-note">Both OFI variants use best-quote changes, not executed buying or full book depth.</p>`;
     const chart=document.createElement('section');chart.id='replay-chart';chart.className='replay-chart';
     chart.hidden=true;chart.setAttribute('aria-label','Session candlestick chart');
-      chart.innerHTML='<div class="replay-chart-head"><strong id="replay-chart-title">Session candles</strong><span id="replay-chart-hover" aria-live="off">Hover a candle for details</span><button id="chart-panel-toggle" type="button" hidden aria-expanded="true">Hide panel</button><span id="replay-chart-oi-status" class="chart-oi-status" hidden></span><span id="replay-chart-asof">—</span></div><svg id="replay-chart-svg" role="img" aria-label="Session candlesticks through available tape" viewBox="0 0 1100 420" preserveAspectRatio="none"></svg><div id="chart-candle-readout" class="chart-candle-readout" role="tooltip" aria-label="Hovered candle price, buyer, seller, delta, flow quality, classified coverage, and quote OFI" hidden><strong id="chart-readout-time">Candle</strong><span class="readout-group" title="Lit initiating side is estimated by quote matching; delta is buyer minus seller classified shares."><span class="readout-label">Candle lit volume</span><span class="readout-values"><b id="chart-volume-buy" class="positive">Buyer —</b><b id="chart-volume-sell" class="negative">Seller —</b><b id="chart-volume-lit">Lit shares —</b><b id="chart-volume-coverage">Classified —</b><b id="chart-volume-delta">Delta —</b></span></span><span id="chart-flow-evidence" class="readout-label">Flow color —</span><span id="chart-raw-evidence" class="readout-label" hidden></span><span id="chart-ofi-readout" class="readout-label">Quote OFI —</span></div>';
+      chart.innerHTML='<div class="replay-chart-head"><strong id="replay-chart-title">Session candles</strong><span id="replay-chart-hover" aria-live="off">Hover a candle for details</span><button id="chart-panel-toggle" type="button" hidden aria-expanded="true">Hide panel</button><span id="replay-chart-oi-status" class="chart-oi-status" hidden></span><span id="replay-chart-asof">—</span></div><svg id="replay-chart-svg" role="img" aria-label="Session candlesticks through available tape" viewBox="0 0 1100 420" preserveAspectRatio="none"></svg><div id="chart-candle-readout" class="chart-candle-readout" role="tooltip" aria-label="Hovered candle price, buyer, seller, delta, flow quality, classified coverage, and quote OFI" hidden><strong id="chart-readout-time">Candle</strong><span class="readout-group" title="Lit initiating side is estimated by quote matching; delta is buyer minus seller classified shares."><span class="readout-label">Candle lit volume</span><span class="readout-values"><b id="chart-volume-buy" class="positive">Buyer —</b><b id="chart-volume-sell" class="negative">Seller —</b><b id="chart-volume-lit">Lit shares —</b><b id="chart-volume-coverage">Classified —</b><b id="chart-volume-delta">Delta —</b></span></span><span id="chart-flow-evidence" class="readout-label">Flow color —</span><span id="chart-ofi-readout" class="readout-label">Quote OFI —</span></div>';
     const chartFocus=document.createElement('button');chartFocus.id='chart-focus-toggle';
     chartFocus.type='button';chartFocus.textContent='⤢ Expand chart';
     chartFocus.setAttribute('aria-label','Expand chart to fill the screen');
@@ -1210,16 +1210,6 @@
     $('chart-flow-evidence').textContent=row?
       window.TRADEYODHA_REPLAY_CHART.candleBodyAppearance(row,state.timeframe).label:
       'Flow color unavailable';
-    const rawLine=$('chart-raw-evidence');
-    const rawItem=row?.complete&&state.mode==='replay'&&REPLAY_EVIDENCE_V1?
-      replayQualityItem(row.stampMs):null;
-    rawLine.hidden=!rawItem;
-    if(rawItem){
-      const minimum=state.timeframe<5?state.timeframe*250:1000;
-      const classified=Number.isFinite(rawItem.rawClassified)?number(rawItem.rawClassified):'unavailable';
-      const coverage=Number.isFinite(rawItem.coverageAll)?`${rawItem.coverageAll.toFixed(1)}%`:'unavailable';
-      rawLine.textContent=`Independent raw audit: ${classified} classified shares (minimum ${number(minimum)}) · ${coverage} of eligible lit shares (minimum 65%). Different population from processed candle.`;
-    }
     const ofiValid=row?.complete&&!row.priceOnly&&Number.isFinite(row.ofi)&&Math.abs(row.ofi)<=1&&
       Number.isFinite(row.quoteUpdates)&&row.quoteUpdates>=3&&
       Number.isFinite(row.quoteAgeMs)&&row.quoteAgeMs>=0&&row.quoteAgeMs<=2000&&
