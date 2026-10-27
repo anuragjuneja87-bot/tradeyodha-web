@@ -371,5 +371,34 @@
     return values.every(value=>Number.isFinite(value))?
       Math.round(values.reduce((sum,value)=>sum+value,0)/14):null;
   }
-  window.TRADEYODHA_VOLUME_PROFILE={summarize,meanOf14};
+  // Fixed market-open windows use the same completed minute share accounting
+  // as the cumulative profile. Missing minutes remain visibly incomplete.
+  function marketHalfHours(rows,endCt){
+    const end=clockMinute(endCt);
+    return [510,540,570,600].map(start=>{
+      const stop=start+30;
+      const clock=minute=>`${String(Math.floor(minute/60)).padStart(2,'0')}:${String(minute%60).padStart(2,'0')}`;
+      const result={startCt:clock(start),endCt:clock(stop),recorded:0,buy:0,sell:0,
+        observed:0,expected:Number.isFinite(end)?Math.max(0,Math.min(end,stop)-start):0,
+        state:'waiting'};
+      if(!Number.isFinite(end)||end<=start)return result;
+      if(!Array.isArray(rows)){result.state='unavailable';return result;}
+      const seen=new Set();
+      for(const row of rows){
+        const minute=clockMinute(row?.t);
+        if(!Number.isInteger(minute)||minute<start||minute>=Math.min(end,stop))continue;
+        const values=['litShares','offExchangeShares','buy','sell'].map(key=>row[key]);
+        if(seen.has(minute)||!values.every(validShares)||values[2]+values[3]>values[0]){
+          result.state='unavailable';return result;
+        }
+        seen.add(minute);result.recorded+=values[0]+values[1];
+        result.buy+=values[2];result.sell+=values[3];
+      }
+      result.observed=seen.size;
+      result.state=!seen.size?'missing':seen.size<result.expected?'incomplete':
+        end<stop?'forming':'complete';
+      return result;
+    });
+  }
+  window.TRADEYODHA_VOLUME_PROFILE={summarize,meanOf14,marketHalfHours};
 })();

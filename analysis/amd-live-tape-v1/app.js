@@ -394,6 +394,12 @@
     const chart=document.createElement('section');chart.id='replay-chart';chart.className='replay-chart';
     chart.hidden=true;chart.setAttribute('aria-label','Session candlestick chart');
       chart.innerHTML='<div class="replay-chart-head"><strong id="replay-chart-title">Session candles</strong><span id="replay-chart-hover" aria-live="off">Hover a candle for details</span><button id="chart-panel-toggle" type="button" hidden aria-expanded="true">Hide panel</button><span id="replay-chart-oi-status" class="chart-oi-status" hidden></span><span id="replay-chart-asof">—</span></div><svg id="replay-chart-svg" role="img" aria-label="Session candlesticks through available tape" viewBox="0 0 1100 420" preserveAspectRatio="none"></svg><div id="chart-candle-readout" class="chart-candle-readout" role="tooltip" aria-label="Hovered candle price, buyer, seller, delta, classified coverage, sweep candidates, and quote OFI" hidden><strong id="chart-readout-time">Candle</strong><span class="readout-group" title="Lit initiating side is estimated by quote matching; delta is buyer minus seller classified shares."><span class="readout-label">Candle lit volume</span><span class="readout-values"><b id="chart-volume-buy" class="positive">Buyer —</b><b id="chart-volume-sell" class="negative">Seller —</b><b id="chart-volume-lit">Lit shares —</b><b id="chart-volume-coverage">Classified —</b><b id="chart-volume-delta">Delta —</b></span></span><span id="chart-ofi-readout" class="readout-label">Quote OFI —</span></div>';
+    const marketStrip=document.createElement('div');marketStrip.id='chart-market-windows';
+    marketStrip.className='chart-market-windows';marketStrip.hidden=true;
+    marketStrip.setAttribute('aria-label','Market-open 30-minute share totals');
+    marketStrip.innerHTML=['08:30–09:00','09:00–09:30','09:30–10:00','10:00–10:30'].map((label,index)=>
+      `<div class="workspace-market-window" data-market-window="${index}"><div class="workspace-market-window-head"><b>${label} CT</b><small data-market-window-state>Waiting</small></div><div class="workspace-market-window-values"><span>Buyer est. <b data-market-window-buy>—</b></span><span>Seller est. <b data-market-window-sell>—</b></span><span>Recorded <b data-market-window-recorded>—</b></span></div></div>`).join('');
+    chart.querySelector('.replay-chart-head').after(marketStrip);
     const sweepLine=document.createElement('span');sweepLine.id='chart-sweep-evidence';
     sweepLine.className='readout-label';
     chart.querySelector('.readout-group').after(sweepLine);
@@ -441,6 +447,7 @@
       const surface=document.createElement('div');surface.id='professional-chart';
       surface.setAttribute('aria-label','Professional session candlestick chart with estimated trade-side body colors');
       chart.querySelector('#replay-chart-svg').after(surface);
+      surface.append(chartFocus);
       chart.querySelector('#replay-chart-svg').hidden=true;
       const empty=document.createElement('div');empty.id='professional-chart-empty';
       empty.className='professional-chart-empty';empty.hidden=true;empty.setAttribute('role','status');
@@ -1086,6 +1093,8 @@
     const summary=!staleLive&&!priceOnlyCursor&&endCt?
       window.TRADEYODHA_VOLUME_PROFILE?.summarize(source,endCt,replay?'06:00':'03:00'):null;
     const baseline=volumeBaselineCache.get(`${symbol}:${day}`),profile=window.TRADEYODHA_VOLUME_PROFILE;
+    const marketWindows=!staleLive&&!priceOnlyCursor&&endCt?
+      profile?.marketHalfHours(source,endCt):null;
     const avgPm=replay&&baseline&&profile.meanOf14(baseline,'08:30','premarket');
     const avgMarket=baseline&&endCt&&profile.meanOf14(baseline,endCt,'market');
     const shares=value=>Number.isFinite(value)?number(value):'N/A';
@@ -1109,6 +1118,25 @@
     const relative=(strike)=>`${money(Math.abs(strike-price))} · ${(100*Math.abs(strike-price)/price).toFixed(2)}% ${strike>price?'above':strike<price?'below':'at'} price`;
     const compare=(actual,average)=>Number.isFinite(actual)&&Number.isFinite(average)&&average>0?
       ` · ${(100*actual/average).toFixed(0)}% of avg`:'';
+    const noTape=loadingReplay?(state.replayLoadError?'Replay unavailable':'Loading replay…'):staleLive?'Feed stale':
+      priceOnlyCursor?'Price-only history':'No recorded trades yet';
+    const marketStrip=$('chart-market-windows');
+    marketStrip.hidden=!endCt||endCt<='08:30'||priceOnlyCursor;
+    for(const [index,node] of [...marketStrip.querySelectorAll('[data-market-window]')].entries()){
+      const bucket=marketWindows?.[index];
+      const available=bucket&&bucket.state!=='waiting'&&bucket.state!=='missing'&&
+        bucket.state!=='unavailable';
+      node.querySelector('[data-market-window-recorded]').textContent=available?shares(bucket.recorded):'—';
+      node.querySelector('[data-market-window-buy]').textContent=available?shares(bucket.buy):'—';
+      node.querySelector('[data-market-window-sell]').textContent=available?shares(bucket.sell):'—';
+      const status=!bucket?noTape:bucket.state==='waiting'?'Not started':
+        bucket.state==='missing'?'No recorded tape':
+        bucket.state==='unavailable'?'Data unavailable':
+        bucket.state==='forming'?`Through ${volumeThrough} CT · ${bucket.observed} min`:
+        bucket.state==='incomplete'?`Incomplete · ${bucket.observed}/${bucket.expected} min`:'Complete';
+      node.querySelector('[data-market-window-state]').textContent=status;
+      node.dataset.state=bucket?.state||'unavailable';
+    }
     for(const panel of document.querySelectorAll('.workspace-volume-panel')){
       const put=(field,value)=>{panel.querySelector(`[data-volume-${field}]`).textContent=value};
       put('symbol',symbol);put('price',money(price));
@@ -1124,8 +1152,6 @@
         endCt&&endCt<=volumeStart?`Premarket · awaiting first completed ${volumeStart} minute`:
         endCt&&endCt<'08:30'?`Premarket · classified ${volumeStart}–${volumeThrough} CT`:
         `Premarket · classified ${volumeStart}–08:29 CT`);
-      const noTape=loadingReplay?(state.replayLoadError?'Replay unavailable':'Loading replay…'):staleLive?'Feed stale':
-        priceOnlyCursor?'Price-only history':'No recorded trades yet';
       put('pm',summary?.premarket?shares(summary.premarket.recorded):noTape);
       put('market',summary?.market?shares(summary.market.recorded):
         loadingReplay?noTape:!endCt||endCt<='08:30'?'Waiting for 08:30':noTape);

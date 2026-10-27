@@ -429,6 +429,21 @@ html.trader-ui-v2 .workspace-volume-side span:first-child b{color:#54dfb6}
 html.trader-ui-v2 .workspace-volume-side span:nth-child(2){border-color:#b65062;background:#3d2530}
 html.trader-ui-v2 .workspace-volume-side span:nth-child(2) b{color:#ff8392}
 html.trader-ui-v2 .workspace-volume-side span:nth-child(3){background:#202c3a}
+html.trader-ui-v2 #chart-market-windows{display:grid;grid-template-columns:repeat(4,minmax(185px,1fr));gap:5px;min-width:0;margin:0 0 6px;overflow-x:auto;flex:none;scrollbar-width:thin}
+html.trader-ui-v2 .workspace-market-window{display:grid;gap:4px;padding:5px 7px;border:1px solid #365972;border-radius:7px;background:#132b3e}
+html.trader-ui-v2 .workspace-market-window-head{display:grid;gap:1px}
+html.trader-ui-v2 .workspace-market-window-head b{font-size:11px;white-space:nowrap}
+html.trader-ui-v2 .workspace-market-window-head small{font-size:9px}
+html.trader-ui-v2 .workspace-market-window[data-state="incomplete"] .workspace-market-window-head small,
+html.trader-ui-v2 .workspace-market-window[data-state="unavailable"] .workspace-market-window-head small{color:#f4c477}
+html.trader-ui-v2 .workspace-market-window-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 6px}
+html.trader-ui-v2 .workspace-market-window-values span{display:grid;gap:1px;min-width:0;font-size:10px;color:#acc5d8}
+html.trader-ui-v2 .workspace-market-window-values b{font-size:12px;white-space:nowrap;color:#e9f6ff}
+html.trader-ui-v2 .workspace-market-window-values span:first-child b{color:#54dfb6}
+html.trader-ui-v2 .workspace-market-window-values span:nth-child(2) b{color:#ff8392}
+html.trader-ui-v2 .workspace-market-window-values span:nth-child(3){grid-column:1/-1;display:flex;justify-content:space-between;gap:5px;border-top:1px solid #365972;padding-top:2px}
+html.trader-ui-v2 .workspace-market-window-values span:nth-child(3) b{font-size:11px}
+html.trader-ui-v2 #chart-market-windows[hidden]{display:none!important}
 html.trader-ui-v2 .workspace-volume-note{margin:0;font-size:10px;line-height:1.35;color:#9eb7c9}
 html.trader-ui-v2 .workspace-major-oi{font-size:11px;line-height:1.4;color:#d7e8f4}
 html.trader-ui-v2 .workspace-oi-grid>div:first-child{border-color:#a77b35;background:#3a3120}
