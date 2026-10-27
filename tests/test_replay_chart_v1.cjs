@@ -89,7 +89,6 @@ assert.equal(chart.candleBodyColor(colorRow(true,750,300),1),'#55caff');
 assert.equal(chart.candleBodyColor(colorRow(true,900,300),1),'#f4fbff');
 assert.equal(chart.candleBodyColor(colorRow(true,300,600),1),'#467fa0');
 assert.equal(chart.candleBodyAppearance(colorRow(true,340,300),1).kind,'weak-flow');
-assert.equal(chart.candleBodyAppearance(colorRow(true,340,300),1).hatched,false);
 assert.equal(chart.candleBodyColor(colorRow(false,300,450),1),'#9b772b');
 assert.equal(chart.candleBodyColor(colorRow(false,300,600),1),'#f0444e');
 assert.equal(chart.candleBodyColor(colorRow(false,300,750),1),'#ff8aa9');
@@ -98,7 +97,7 @@ assert.equal(chart.candleBodyColor(colorRow(false,600,300),1),'#9b772b');
 assert.equal(chart.candleBodyColor(colorRow(true,900,300,false),1),'#335c70');
 assert.equal(chart.candleBodyColor(colorRow(false,300,900,false),1),'#604b5b');
 assert.equal(chart.candleBodyAppearance(colorRow(true,900,300,false),1).kind,'unavailable');
-assert.equal(chart.candleBodyAppearance(colorRow(false,300,900,false),1).hatched,true);
+assert.equal(chart.candleBodyAppearance(colorRow(false,300,900,false),1).kind,'unavailable');
 const conflictingQuality={...colorRow(true,900,300,false),
   deltaEvidence:{kind:'stale',label:'Stale quote'}};
 assert.equal(chart.histogramDelta(conflictingQuality,1).source,'processed');

@@ -94,7 +94,7 @@
     const flow=histogramDelta(row,width);
     if(flow.value===null)return {
       color:up?'#335c70':down?'#604b5b':'#46515c',kind:'unavailable',
-      label:`Trade-side unavailable · ${flow.source==='raw'?'independent raw tape: ':'processed candle: '}${flow.reason}`,hatched:!!row?.complete};
+      label:`Trade-side unavailable · ${flow.source==='raw'?'independent raw tape: ':'processed candle: '}${flow.reason}`};
     const tier=volumePressureTier(row,width);
     if(up){
       const strong={
@@ -102,15 +102,15 @@
         'buyer-2_5':'#55caff','buyer-3':'#f4fbff'};
       return {color:strong[tier]||'#467fa0',kind:strong[tier]?'buyer':'weak-flow',
         label:strong[tier]?`Price up · buyer/seller ${row.sell>0?(row.buy/row.sell).toFixed(2)+'×':'seller zero'}`:
-          'Price up · no qualified 1.5× buyer advantage',hatched:false};
+          'Price up · no qualified 1.5× buyer advantage'};
     }
     if(down){
       const strong={'seller-2':'#f0444e','seller-2_5':'#ff8aa9','seller-3':'#ff8aa9'};
       return {color:strong[tier]||'#9b772b',kind:strong[tier]?'seller':'weak-flow',
         label:strong[tier]?`Price down · seller/buyer ${row.buy>0?(row.sell/row.buy).toFixed(2)+'×':'buyer zero'}`:
-          'Price down · no qualified 2× seller advantage',hatched:false};
+          'Price down · no qualified 2× seller advantage'};
     }
-    return {color:'#8797a0',kind:'flat',label:'Flat candle close',hatched:false};
+    return {color:'#8797a0',kind:'flat',label:'Flat candle close'};
   }
   function candleBodyColor(row,width){return candleBodyAppearance(row,width).color}
   // All inputs belong to the completed candle available at the current cursor.
@@ -619,19 +619,9 @@ if(typeof window!=="undefined" && window.TRADER_UI_V2){
         ctx.lineTo(right+depth,top+bodyHeight-rise);ctx.lineTo(right,top+bodyHeight);
         ctx.closePath();ctx.fill();
         // The front face shares the native OHLC geometry; wicks and scale stay native.
-        const appearance=root.TRADEYODHA_REPLAY_CHART.candleBodyAppearance(row,obj.intervalMinutes);
         const projected=candle(row,obj.intervalMinutes);
         ctx.fillStyle=projected.color;
         ctx.fillRect(left,top,bodyWidth,bodyHeight);
-        if(appearance.hatched){
-          ctx.save();ctx.beginPath();ctx.rect(left,top,bodyWidth,bodyHeight);ctx.clip();
-          ctx.strokeStyle='rgba(222,235,244,.55)';ctx.lineWidth=1;
-          for(let offset=-bodyHeight;offset<bodyWidth+bodyHeight;offset+=6){
-            ctx.beginPath();ctx.moveTo(left+offset,top+bodyHeight);
-            ctx.lineTo(left+offset+bodyHeight,top);ctx.stroke();
-          }
-          ctx.restore();
-        }
         ctx.strokeStyle=projected.borderColor;
         ctx.lineWidth=.8;ctx.strokeRect(left+.4,top+.4,Math.max(1,bodyWidth-.8),Math.max(1,bodyHeight-.8));
         ctx.strokeStyle='rgba(239,250,255,.7)';
